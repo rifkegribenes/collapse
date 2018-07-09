@@ -1,0 +1,20 @@
+{
+  "name": "collapse",
+  "version": "1.0.0",
+  "description": "A front-row seat to the collapse of late capitalism",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rifkegribenes/collapse.git"
+  },
+  "author": "Sarah Schneider",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rifkegribenes/collapse/issues"
+  },
+  "homepage": "https://github.com/rifkegribenes/collapse#readme"
+}
