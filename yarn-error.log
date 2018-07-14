@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/10.0.0/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js start
+  /usr/local/Cellar/node/10.0.0/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js dev
 
 PATH: 
   /Library/Frameworks/Python.framework/Versions/3.6/bin:/usr/local/sbin:/usr/local/bin:/Users/sarahschneider/node_modules/.bin/:/Users/sarahschneider/.npm-global/bin:/Users/sarahschneider/.rbenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -21,7 +21,11 @@ npm manifest:
     "main": "server.js",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "node server.js"
+      "start": "webpack -d | node server.js",
+      "client": "cd client && yarn build && yarn start",
+      "sass": "cd client && yarn sass",
+      "server": "LOG_LEVEL=debug nodemon --inspect server.js",
+      "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\" \"yarn sass\""
     },
     "repository": {
       "type": "git",
@@ -573,9 +577,9 @@ Lockfile:
 
 Trace: 
   Error: Command failed.
-  Exit code: 1
+  Exit code: 127
   Command: sh
-  Arguments: -c node server.js
+  Arguments: -c concurrently --kill-others-on-fail "yarn server" "yarn client" "yarn sass"
   Directory: /Users/sarahschneider/Documents/_Sarah/projects/freecodecamp/collapse
   Output:
   
