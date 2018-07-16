@@ -147,7 +147,7 @@ export const updateStock = (req, res) => {
 }
 
 // delete stock
-export const deleteStock = (req, res) => {
+export const removeStock = (req, res) => {
   Stock.findById(req.params.id)
     .then(handleNotFound(res))
     .then(removeEntity(res))

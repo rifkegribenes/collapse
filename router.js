@@ -21,15 +21,19 @@ module.exports = function (app) {
 
   // Get all stocks
   // Returns fail status + message -or- array of all stocks
-  // stockRoutes.get('/allstocks', StockController.getStocks);
+  stockRoutes.get('/allstocks', StockController.getAllStocks);
+
+  // Get one stock by code
+  // Returns fail status + message -or- single stock object
+  stockRoutes.get('/stock/:stock/', StockController.getOneStock);
 
   // Add a stack
   // Returns fail status + message -or- array of all stocks
-  // stockRoutes.put('/add/:stockId/', StockController.addStock);
+  stockRoutes.put('/add/:stock/', StockController.addStock);
 
   // Remove a stack
   // Returns fail status + message -or- array of all stocks
-  // stockRoutes.put('/remove/:stockId/', StockController.removeStock);
+  stockRoutes.put('/remove/:stock/', StockController.removeStock);
 
 
   // Set url for API group routes
