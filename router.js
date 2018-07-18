@@ -28,11 +28,11 @@ module.exports = function (app) {
   stockRoutes.get('/stock/:stock/', StockController.getOneStock);
 
   // Add a stack
-  // Returns fail status + message -or- array of all stocks
+  // Returns fail status + message -or- success status
   stockRoutes.put('/add/:stock/', StockController.addStock);
 
   // Remove a stack
-  // Returns fail status + message -or- array of all stocks
+  // Returns fail status + message -or- success status
   stockRoutes.put('/remove/:stock/', StockController.removeStock);
 
 

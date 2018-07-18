@@ -97,11 +97,11 @@ exports.getOneStock = (req, res) => {
 // add stock to mongo
 exports.addStock = (req, res) => {
 
-  if (!req.body.stock) {
+  if (!req.params.stock) {
     return res.status(400).json({ message: 'Stock not found.' });
   }
 
-  https.get(`https://www.quandl.com/api/v3/datasets/WIKI/${req.body.stock.toUpperCase()}/metadata.json`, (res2) => {
+  https.get(`https://www.quandl.com/api/v3/datasets/WIKI/${req.params.stock.toUpperCase()}/metadata.json`, (res2) => {
     let data = '';
 
     res2.on('data', (chunk) => {
@@ -110,22 +110,31 @@ exports.addStock = (req, res) => {
 
     res2.on('end', () => {
       data = JSON.parse(data);
+      console.log(data);
 
       res
         .status(res2.statusCode)
         .end();
 
       if (parseInt(res2.statusCode / 100) === 2) {
-        Stock.find({code: data.dataset.dataset_code})
+        const code = data.dataset.dataset_code;
+        console.log(code);
+
+        // look for stock in DB by code
+        Stock.find({ code })
           .then((stock) => {
+
+            // if stock already exists in DB, return
             if (stock.length) {
               return;
             }
 
+            // otherwise, create new record in mongo
             Stock.create({
               name: data.dataset.name,
               code: data.dataset.dataset_code
             });
+
           });
       }
     });
@@ -148,7 +157,7 @@ exports.updateStock = (req, res) => {
 
 // delete stock
 exports.removeStock = (req, res) => {
-  Stock.findById(req.params.id)
+  Stock.findById(req.params.stock)
     .then(handleNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
