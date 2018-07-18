@@ -1,4 +1,4 @@
-const Stock = require('./models/stock.model');
+const Stock = require('../models/stock.model');
 const merge = require('lodash.merge');
 const https = require('https');
 
@@ -49,7 +49,7 @@ const removeEntity = (res) => {
 }
 
 // get all stocks
-export const getAllStocks = (req, res) => {
+exports.getAllStocks = (req, res) => {
   Stock.find()
     .then(handleResponse(res))
     .catch(handleError(res));
@@ -88,14 +88,14 @@ const getStockData = (stock) => {
 }
 
 // get one stock
-export const getOneStock = (req, res) => {
+exports.getOneStock = (req, res) => {
   getStockData(req.params.id)
     .then(handleResponse(res))
     .catch(handleError(res, 400));
   }
 
 // add stock to mongo
-export const addStock = (req, res) => {
+exports.addStock = (req, res) => {
 
   if (!req.body.stock) {
     return res.status(400).json({ message: 'Stock not found.' });
@@ -135,7 +135,7 @@ export const addStock = (req, res) => {
 }
 
 // update stock
-export const updateStock = (req, res) => {
+exports.updateStock = (req, res) => {
   if (req.body._id) {
     delete req.body._id;
   }
@@ -147,7 +147,7 @@ export const updateStock = (req, res) => {
 }
 
 // delete stock
-export const removeStock = (req, res) => {
+exports.removeStock = (req, res) => {
   Stock.findById(req.params.id)
     .then(handleNotFound(res))
     .then(removeEntity(res))
