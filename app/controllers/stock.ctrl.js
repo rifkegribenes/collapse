@@ -89,7 +89,8 @@ const getStockData = (stock) => {
 
 // get one stock
 exports.getOneStock = (req, res) => {
-  getStockData(req.params.id)
+  console.log(`getting ${req.params.stock}`);
+  getStockData(req.params.stock)
     .then(handleResponse(res))
     .catch(handleError(res, 400));
   }

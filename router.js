@@ -25,7 +25,7 @@ module.exports = function (app) {
 
   // Get one stock by code
   // Returns fail status + message -or- single stock object
-  stockRoutes.get('/stock/:stock/', StockController.getOneStock);
+  stockRoutes.get('/view/:stock/', StockController.getOneStock);
 
   // Add a stack
   // Returns fail status + message -or- success status
