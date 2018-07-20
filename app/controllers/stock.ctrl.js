@@ -89,7 +89,6 @@ const getStockData = (stock) => {
 
 // get one stock
 exports.getOneStock = (req, res) => {
-  console.log(`getting ${req.params.stock}`);
   getStockData(req.params.stock)
     .then(handleResponse(res))
     .catch(handleError(res, 400));
@@ -111,7 +110,6 @@ exports.addStock = (req, res) => {
 
     res2.on('end', () => {
       data = JSON.parse(data);
-      console.log(data);
 
       res
         .status(res2.statusCode)
@@ -119,7 +117,6 @@ exports.addStock = (req, res) => {
 
       if (parseInt(res2.statusCode / 100) === 2) {
         const code = data.dataset.dataset_code;
-        console.log(code);
 
         // look for stock in DB by code
         Stock.find({ code })
