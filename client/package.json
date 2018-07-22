@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "highcharts": "^6.1.1",
+    "immutability-helper": "^2.7.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",

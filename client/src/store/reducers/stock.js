@@ -18,7 +18,7 @@ import {
   REMOVE_STOCK_REQUEST,
   REMOVE_STOCK_SUCCESS,
   REMOVE_STOCK_FAILURE,
-} from "../actions/apiStockActions";
+} from "../actions/apiActions";
 
 const INITIAL_STATE = {
   errorMsg: "",
@@ -151,7 +151,6 @@ function stock(state = INITIAL_STATE, action) {
           class: "modal__show",
           type: "modal__error",
           text: error,
-          title,
           buttonText: "Try again"
         }
       });
