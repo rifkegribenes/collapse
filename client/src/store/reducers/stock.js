@@ -104,8 +104,8 @@ function stock(state = INITIAL_STATE, action) {
       });
 
     case VIEW_STOCK_SUCCESS:
-      // is this even necessary ???
-      console.log("view stock");
+    case ADD_STOCK_SUCCESS:
+    case REMOVE_STOCK_SUCCESS:
 
       return update(state, {
         spinnerClass: { $set: "spinner__hide" },
@@ -119,8 +119,7 @@ function stock(state = INITIAL_STATE, action) {
     *  Payload: array of stock objects
     *  Purpose: Display stocks
     */
-    case ADD_STOCK_SUCCESS:
-    case REMOVE_STOCK_SUCCESS:
+
     case GET_ALL_STOCKS_SUCCESS:
       return Object.assign({}, state, {
         spinnerClass: "spinner__hide",
