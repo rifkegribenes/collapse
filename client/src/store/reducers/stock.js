@@ -138,7 +138,7 @@ function stock(state = INITIAL_STATE, action) {
 
     case GET_ALL_STOCKS_FAILURE:
     case VIEW_STOCK_FAILURE:
-    case REMOVE_STOCK_SUCCESS:
+    case REMOVE_STOCK_FAILURE:
     case ADD_STOCK_FAILURE:
       if (typeof action.payload.message === "string") {
         error = action.payload.message;

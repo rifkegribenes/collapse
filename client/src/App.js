@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import PropTypes from "prop-types";
+// import { connect } from "react-redux";
+// import { bindActionCreators } from "redux";
+// import PropTypes from "prop-types";
 import './App.css';
 
 import Chart from './containers/Chart';
@@ -12,8 +12,8 @@ import Chart from './containers/Chart';
 // import Spinner from "./containers/Spinner";
 // import ModalSm from "./containers/ModalSm";
 
-import * as apiActions from "./store/actions/apiActions";
-import * as Actions from "./store/actions";
+// import * as apiActions from "./store/actions/apiActions";
+// import * as Actions from "./store/actions";
 
 class App extends Component {
   render() {

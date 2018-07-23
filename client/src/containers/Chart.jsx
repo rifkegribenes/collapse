@@ -9,17 +9,34 @@ import * as apiActions from "../store/actions/apiActions";
 
 class Chart extends React.Component {
   componentDidMount() {
-    // load data OR
+    this.props.api.getAllStocks()
+      // .then((result) => console.log(result));
+    // OR
     // load placeholder data
   }
 
   render() {
+    const stocks = this.props.stock.stocks.length ? [ ...this.props.stock.stocks ] : null;
+    let stocklist = "no stocks";
+    if (stocks) {
+      stocklist = stocks.map((stock) => {
+        return (
+          <div key={stock._id}>
+            <p>{stock._id}</p>
+            <p>{stock.name}</p>
+            <p>{stock.code}</p>
+            <p>{stock.__v}</p>
+            <hr />
+          </div>
+          );
+      });
+    }
     return (
       <div className="splash">
         <h2 className="splash__header">
          Here's the chart
         </h2>
-        {this.props.stock.stocks.length ? this.props.stock.stocks : null}
+        {stocklist}
       </div>
     );
   }
