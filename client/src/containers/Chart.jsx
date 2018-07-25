@@ -15,11 +15,17 @@ class Chart extends React.Component {
     // load placeholder data
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.stock.stocks.length !== this.props.stock.stocks.length) {
+      this.props.api.getAllStocks()
+        .then(() => this.forceUpdate());
+    }
+  }
+
   render() {
-    const stocks = this.props.stock.stocks.length ? [ ...this.props.stock.stocks ] : null;
     let stocklist = "no stocks";
-    if (stocks) {
-      stocklist = stocks.map((stock) => {
+    if (this.props.stock.stocks.length) {
+      stocklist = this.props.stock.stocks.map((stock) => {
         return (
           <div key={stock._id}>
             <p>{stock._id}</p>
@@ -29,6 +35,7 @@ class Chart extends React.Component {
             <button
               onClick={
                 () => this.props.api.removeStock(stock._id)
+                .then(() => this.props.api.getAllStocks())
               }
             >Remove</button>
             <hr />

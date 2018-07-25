@@ -20,11 +20,6 @@ class AddStock extends React.Component {
 
   }
 
-  addStock(stock) {
-    this.props.api.addStock(stock)
-    .then(() => this.props.api.getAllStocks());
-  }
-
   handleInput(e) {
     this.setState({
       input: e.target.value
@@ -44,7 +39,8 @@ class AddStock extends React.Component {
         <button
           className="add__button"
           type="button"
-          onClick={() => this.addStock(this.state.input)}
+          onClick={() => this.props.api.addStock(this.state.input)
+            .then(() => this.props.api.getAllStocks())}
           >
           Add
         </button>
