@@ -26,6 +26,11 @@ class Chart extends React.Component {
             <p>{stock.name}</p>
             <p>{stock.code}</p>
             <p>{stock.__v}</p>
+            <button
+              onClick={
+                () => this.props.api.removeStock(stock._id)
+              }
+            >Remove</button>
             <hr />
           </div>
           );

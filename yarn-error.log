@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/10.0.0/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js add --save lodash.merge
+  /usr/local/Cellar/node/10.0.0/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js dev
 
 PATH: 
   /Library/Frameworks/Python.framework/Versions/3.6/bin:/usr/local/sbin:/usr/local/bin:/Users/sarahschneider/node_modules/.bin/:/Users/sarahschneider/.npm-global/bin:/Users/sarahschneider/.rbenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -44,6 +44,7 @@ npm manifest:
       "dotenv": "^6.0.0",
       "express": "^4.16.3",
       "https": "^1.0.0",
+      "lodash.merge": "^4.6.1",
       "mongoose": "^5.2.2",
       "morgan": "^1.9.0",
       "path": "^0.12.7",
@@ -386,6 +387,10 @@ Lockfile:
   lodash.get@4.4.2:
     version "4.4.2"
     resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
+  
+  lodash.merge@^4.6.1:
+    version "4.6.1"
+    resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.1.tgz#adc25d9cb99b9391c59624f379fbba60d7111d54"
   
   lodash@^4.17.10, lodash@^4.5.1:
     version "4.17.10"
@@ -767,14 +772,16 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
 
 Trace: 
-  Error: Missing list of packages to add to your project.
-      at new MessageError (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:186:110)
-      at Object.<anonymous> (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:40587:13)
-      at Generator.next (<anonymous>)
-      at step (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:98:30)
-      at /usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:116:14
-      at new Promise (<anonymous>)
-      at new F (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:23451:28)
-      at Object.<anonymous> (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:95:12)
-      at Object.run (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:40599:19)
-      at run (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:89113:20)
+  Error: Command failed.
+  Exit code: 1
+  Command: sh
+  Arguments: -c concurrently --kill-others-on-fail "yarn server" "yarn client" "yarn sass"
+  Directory: /Users/sarahschneider/Documents/_Sarah/projects/freecodecamp/collapse
+  Output:
+  
+      at ProcessTermError.MessageError (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:186:110)
+      at new ProcessTermError (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:226:113)
+      at ChildProcess.<anonymous> (/usr/local/Cellar/yarn/1.5.1_1/libexec/lib/cli.js:30281:17)
+      at ChildProcess.emit (events.js:182:13)
+      at maybeClose (internal/child_process.js:947:16)
+      at Process.ChildProcess._handle.onexit (internal/child_process.js:236:5)
