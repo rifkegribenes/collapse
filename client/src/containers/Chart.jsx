@@ -17,38 +17,57 @@ class Chart extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.stock.stocks.length !== this.props.stock.stocks.length) {
+      console.log('stocks array changed:');
+      console.log(`${this.props.stock.stocks.length} => ${nextProps.stock.stocks.length}`);
       this.props.api.getAllStocks()
-        .then(() => this.forceUpdate());
+        // .then(() => this.forceUpdate());
     }
   }
 
   render() {
-    let stocklist = "no stocks";
-    if (this.props.stock.stocks.length) {
-      stocklist = this.props.stock.stocks.map((stock) => {
-        return (
-          <div key={stock._id}>
-            <p>{stock._id}</p>
-            <p>{stock.name}</p>
-            <p>{stock.code}</p>
-            <p>{stock.__v}</p>
-            <button
-              onClick={
-                () => this.props.api.removeStock(stock._id)
-                .then(() => this.props.api.getAllStocks())
-              }
-            >Remove</button>
-            <hr />
-          </div>
-          );
-      });
-    }
+    // let stocklist = "no stocks";
+    // if (this.props.stock.stocks.length) {
+    //   stocklist = this.props.stock.stocks.map((stock) => {
+    //     return (
+    //       <div key={stock._id}>
+    //         <p>{stock._id}</p>
+    //         <p>{stock.name}</p>
+    //         <p>{stock.code}</p>
+    //         <p>{stock.__v}</p>
+    //         <button
+    //           onClick={
+    //             () => this.props.api.removeStock(stock._id)
+    //             .then(() => this.props.api.getAllStocks())
+    //           }
+    //         >Remove</button>
+    //         <hr />
+    //       </div>
+    //       );
+    //   });
+    // }
     return (
       <div className="splash">
         <h2 className="splash__header">
          Here's the chart
         </h2>
-        {stocklist}
+        {this.props.stock.stocks.length ?
+          this.props.stock.stocks.map((stock) => {
+          return (
+            <div key={stock._id}>
+              <p>{stock._id}</p>
+              <p>{stock.name}</p>
+              <p>{stock.code}</p>
+              <p>{stock.__v}</p>
+              <button
+                onClick={
+                  () => this.props.api.removeStock(stock._id)
+                  .then(() => this.props.api.getAllStocks())
+                }
+              >Remove</button>
+              <hr />
+            </div>
+            )}) : "no stocks"
+        }
       </div>
     );
   }

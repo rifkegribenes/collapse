@@ -26,9 +26,9 @@ class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.stock.stocks.length !== this.props.stock.stocks.length) {
-      this.props.api.getAllStocks()
-    }
+    // if (nextProps.stock.stocks.length !== this.props.stock.stocks.length) {
+    //   this.props.api.getAllStocks()
+    // }
 
       // .then((result) => console.log(result));
     // OR

@@ -106,13 +106,21 @@ function stock(state = INITIAL_STATE, action) {
     case VIEW_STOCK_SUCCESS:
     case ADD_STOCK_SUCCESS:
     case REMOVE_STOCK_SUCCESS:
-
       return update(state, {
         spinnerClass: { $set: "spinner__hide" },
         modal: {
           class: { $set: "modal__hide" }
         }
       });
+
+    // case ADD_STOCK_SUCCESS:
+    //   return update(state, {
+    //     spinnerClass: { $set: "spinner__hide" },
+    //     modal: {
+    //       class: { $set: "modal__hide" }
+    //     },
+    //     stocks: { $set: update(state.stocks, {$push: action.payload}) }
+    //   });
 
     /*
     *  Called from: <App />
@@ -121,12 +129,13 @@ function stock(state = INITIAL_STATE, action) {
     */
 
     case GET_ALL_STOCKS_SUCCESS:
-      return Object.assign({}, state, {
-        spinnerClass: "spinner__hide",
+      console.log(action.payload);
+      return update(state, {
+        spinnerClass: { $set: "spinner__hide" },
         modal: {
-          class: "modal__hide"
+          class: { $set: "modal__hide" }
         },
-        stocks: [...action.payload]
+        stocks: { $set: [...action.payload] }
       });
 
     /*
