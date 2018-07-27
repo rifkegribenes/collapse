@@ -15,14 +15,14 @@ class Chart extends React.Component {
     // load placeholder data
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.stock.stocks.length !== this.props.stock.stocks.length) {
-      console.log('stocks array changed:');
-      console.log(`${this.props.stock.stocks.length} => ${nextProps.stock.stocks.length}`);
-      this.props.api.getAllStocks()
-        // .then(() => this.forceUpdate());
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.stock.stocks.length !== this.props.stock.stocks.length) {
+  //     console.log('stocks array changed:');
+  //     console.log(`${this.props.stock.stocks.length} => ${nextProps.stock.stocks.length}`);
+  //     this.props.api.getAllStocks()
+  //       // .then(() => this.forceUpdate());
+  //   }
+  // }
 
   render() {
     // let stocklist = "no stocks";
@@ -61,7 +61,7 @@ class Chart extends React.Component {
               <button
                 onClick={
                   () => this.props.api.removeStock(stock._id)
-                  .then(() => this.props.api.getAllStocks())
+                  .then()
                 }
               >Remove</button>
               <hr />

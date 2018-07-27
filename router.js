@@ -29,11 +29,11 @@ module.exports = function (app) {
 
   // Add a stack
   // Returns fail status + message -or- success status
-  stockRoutes.put('/add/:stock/', StockController.addStock);
+  stockRoutes.put('/add/:stock/', StockController.addStock, StockController.getAllStocks);
 
   // Remove a stack
   // Returns fail status + message -or- success status
-  stockRoutes.put('/remove/:stock/', StockController.removeStock);
+  stockRoutes.put('/remove/:stock/', StockController.removeStock, StockController.getAllStocks);
 
 
   // Set url for API group routes

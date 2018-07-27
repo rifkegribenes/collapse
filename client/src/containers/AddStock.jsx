@@ -51,11 +51,8 @@ class AddStock extends React.Component {
             this.props.api.addStock(this.state.input)
             .then(() => {
               console.log('added');
-              this.props.api.getAllStocks()
-              .then(() => {
-                console.log(this.props.stock.stocks);
-                this.clearInput();
-              });
+              console.log(this.props.stock.stocks);
+              this.clearInput();
             })
           }}
           >
