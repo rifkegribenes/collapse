@@ -3,6 +3,8 @@
 // set up ======================================================================
 var express = require('express');
 var app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const path = require('path');
 require('dotenv').load();
 const favicon = require('serve-favicon');
@@ -39,6 +41,17 @@ app.use(cors());
 // routes ======================================================================
 const router = require('./router');
 router(app);
+
+// io.on('connection', function(socket) {
+// 	console.log('New client connected');
+// 	socket.emit('stocks', { stocks: ['GOOGL', 'APPL'] });
+// 	socket.on('my other event', function(data) {
+// 		console.log(data);
+// 	});
+// 	socket.on('disconnect', function() {
+// 		console.log('Client disconnected');
+// 	});
+// });
 
 // launch ======================================================================
 var port = process.env.PORT || 3001;

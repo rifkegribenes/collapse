@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import socketIOClient from "socket.io-client";
 // import PropTypes from "prop-types";
 import './App.css';
 
@@ -18,12 +19,26 @@ import * as Actions from "./store/actions";
 
 class App extends Component {
 
-  componentDidMount() {
-    this.props.api.getAllStocks()
-      // .then((result) => console.log(result));
-    // OR
-    // load placeholder data
+  constructor() {
+    super();
+    this.state = {
+      response: false,
+      endpoint: "http://127.0.0.1:3001"
+    };
   }
+  componentDidMount() {
+    // const { endpoint } = this.state;
+    // const socket = socketIOClient(endpoint);
+    // socket.on("stocks", data => this.setState({ response: data }));
+    // console.log(this.state.response);
+  }
+
+  // componentDidMount() {
+  //   this.props.api.getAllStocks()
+  //     // .then((result) => console.log(result));
+  //   // OR
+  //   // load placeholder data
+  // }
 
   componentWillReceiveProps(nextProps) {
     // if (nextProps.stock.stocks.length !== this.props.stock.stocks.length) {
