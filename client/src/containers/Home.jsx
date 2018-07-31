@@ -2,19 +2,23 @@ import React from "react";
 import Highcharts from 'highcharts/highstock';
 import {
   HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Title, Legend,
-  AreaSplineSeries, Navigator, RangeSelector, Tooltip
+  LineSeries, Navigator, RangeSelector, Tooltip
 } from 'react-jsx-highstock';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../store/actions";
 import * as apiActions from "../store/actions/apiActions";
 
-// import SearchBar from "./SearchBar";
-// import Parks from "./Parks";
+const colors = [
+  '#6740b4',
+  '#2c98f0',
+  '#f05830',
+  '#febf2e',
+  '#50ad55'
+];
 
 class Home extends React.Component {
   componentDidMount() {
-    console.log('cDM');
     this.props.api.getAllStocks()
       // .then((result) => console.log(result));
     // OR
@@ -29,6 +33,22 @@ class Home extends React.Component {
   //       // .then(() => this.forceUpdate());
   //   }
   // }
+  //
+  getSeries(chartData) {
+    console.log(chartData);
+    return chartData.map((data, i) => {
+      return (
+        <LineSeries
+          key={i}
+          id={i}
+          name={data.stockCode}
+          step
+          color={colors[i]}
+          data={data.stockData}
+        />
+      )
+    })
+  }
 
   render() {
     // let stocklist = "no stocks";
@@ -51,7 +71,17 @@ class Home extends React.Component {
     //       );
     //   });
     // }
-    const data = this.props.stock.stocks;
+    let data = [];
+    if (this.props.stock.stocks.length) {
+      console.log(this.props.stock.stocks);
+      data = this.props.stock.stocks.map((stock) => {
+        this.props.api.viewStock(stock.code)
+          .then(() => {
+            console.log(this.props.stock.currentStock.stockData)
+            return this.props.stock.currentStock.stockData;
+          });
+      });
+    }
     return (
       <div className="splash">
         <h2 className="splash__header">
@@ -83,7 +113,7 @@ class Home extends React.Component {
 
           <YAxis>
             <YAxis.Title>Price</YAxis.Title>
-            <AreaSplineSeries id="profit" name="Profit" data={data} />
+            {data ? this.getSeries(data) : null}
           </YAxis>
 
           <Navigator>

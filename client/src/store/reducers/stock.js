@@ -39,6 +39,7 @@ const INITIAL_STATE = {
 
 function stock(state = INITIAL_STATE, action) {
   let error;
+  let data;
   switch (action.type) {
 
     case VIEW_STOCK_REQUEST:
@@ -103,7 +104,6 @@ function stock(state = INITIAL_STATE, action) {
         }
       });
 
-    case VIEW_STOCK_SUCCESS:
     case ADD_STOCK_SUCCESS:
     case REMOVE_STOCK_SUCCESS:
 
@@ -111,6 +111,21 @@ function stock(state = INITIAL_STATE, action) {
         spinnerClass: { $set: "spinner__hide" },
         modal: {
           class: { $set: "modal__hide" }
+        }
+      });
+
+    case VIEW_STOCK_SUCCESS:
+      console.log(action.payload.dataset.data);
+      data = [ ...action.payload.dataset.data ];
+      return update(state, {
+        spinnerClass: { $set: "spinner__hide" },
+        modal: {
+          class: { $set: "modal__hide" }
+        },
+        currentStock: {
+          stockId: { $set: action.payload.id },
+          stockCode: { $set: action.payload.dataset.dataset_code },
+          stockData: { $set: data }
         }
       });
 
