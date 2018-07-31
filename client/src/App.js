@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import socketIOClient from "socket.io-client";
+// import socketIOClient from "socket.io-client";
 // import PropTypes from "prop-types";
 import './App.css';
 
-import Chart from './containers/Chart';
+import Home from './containers/Home';
 import AddStock from './containers/AddStock';
 // import Header from "./containers/Header";
 // import Home from "./containers/Home";
@@ -59,7 +59,7 @@ class App extends Component {
         <p className="App-intro">
           A front-row seat to the collapse of late capitalism. Featuring websockets so you can watch in real time with your friends.
         </p>
-        <Chart />
+        <Home />
         <AddStock />
       </div>
     );

@@ -7,6 +7,7 @@
     "immutability-helper": "^2.7.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-jsx-highstock": "^3.1.0",
     "react-redux": "^5.0.7",
     "react-vis": "^1.10.4",
     "redux": "^4.0.0",
