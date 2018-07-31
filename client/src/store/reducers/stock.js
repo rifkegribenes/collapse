@@ -136,6 +136,7 @@ function stock(state = INITIAL_STATE, action) {
     */
 
     case GET_ALL_STOCKS_SUCCESS:
+      console.log(action.payload);
       return Object.assign({}, state, {
         spinnerClass: "spinner__hide",
         modal: {
@@ -151,6 +152,23 @@ function stock(state = INITIAL_STATE, action) {
     */
 
     case GET_ALL_STOCKS_FAILURE:
+      console.log(action.payload);
+      if (typeof action.payload.message === "string") {
+        error = action.payload.message;
+      } else {
+        error = "Sorry, something went wrong :(\nPlease try again.";
+      }
+      console.log(error);
+      return Object.assign({}, state, {
+        spinnerClass: "spinner__hide",
+        modal: {
+          class: "modal__show",
+          type: "modal__error",
+          text: error,
+          buttonText: "Try again"
+        }
+      });
+
     case VIEW_STOCK_FAILURE:
     case REMOVE_STOCK_FAILURE:
     case ADD_STOCK_FAILURE:

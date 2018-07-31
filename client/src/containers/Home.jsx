@@ -41,10 +41,10 @@ class Home extends React.Component {
         <LineSeries
           key={i}
           id={i}
-          name={data.stockCode}
+          name={data.code}
           step
           color={colors[i]}
-          data={data.stockData}
+          data={data.data}
         />
       )
     })
@@ -71,17 +71,17 @@ class Home extends React.Component {
     //       );
     //   });
     // }
-    let data = [];
-    if (this.props.stock.stocks.length) {
-      console.log(this.props.stock.stocks);
-      data = this.props.stock.stocks.map((stock) => {
-        this.props.api.viewStock(stock.code)
-          .then(() => {
-            console.log(this.props.stock.currentStock.stockData)
-            return this.props.stock.currentStock.stockData;
-          });
-      });
-    }
+    // let data = [];
+    // if (this.props.stock.stocks.length) {
+    //   console.log(this.props.stock.stocks);
+    //   data = this.props.stock.stocks.map((stock) => {
+    //     this.props.api.viewStock(stock.code)
+    //       .then(() => {
+    //         console.log(this.props.stock.currentStock.stockData)
+    //         return this.props.stock.currentStock.stockData;
+    //       });
+    //   });
+    // }
     return (
       <div className="splash">
         <h2 className="splash__header">
@@ -113,7 +113,7 @@ class Home extends React.Component {
 
           <YAxis>
             <YAxis.Title>Price</YAxis.Title>
-            {data ? this.getSeries(data) : null}
+            {this.props.stock.stocks.length ? this.getSeries(this.props.stock.stocks) : null}
           </YAxis>
 
           <Navigator>
