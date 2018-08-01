@@ -25,11 +25,50 @@
   padding: 20px;
   border: 1px solid #ccc;
   width: 32%;
-  margin: 20px 1%; }
+  margin: 20px 1%;
+  position: relative; }
 
-.highcharts-container,
-.highcharts-root {
-  font-family: 'Unica One', sans-serif !important; }
+.app {
+  background-color: #444444;
+  padding: 40px; }
+
+.highcharts-background {
+  padding: 20px; }
+
+.stock {
+  font-family: "Lato", sans-serif;
+  color: silver; }
+  .stock__code {
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: 700; }
+  .stock__button {
+    padding: 6px;
+    font-size: 1.2em;
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: silver;
+    font-family: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    font-weight: inherit;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 5px; }
+    .stock__button:hover, .stock__button:active, .stock__button:focus {
+      -webkit-appearance: none;
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: white;
+      font-family: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      font-weight: inherit;
+      cursor: pointer; }
 
 .spinner {
   color: rgba(0, 0, 0, 0.6);

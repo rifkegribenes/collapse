@@ -51,7 +51,33 @@ const removeEntity = (res) => {
 // get all stocks
 exports.getAllStocks = (req, res) => {
   Stock.find()
-    .then(handleResponse(res))
+    .then((stocks) => {
+      // console.log(`stock.ctrl.js > 55`);
+      // console.log(stocks);
+      let stockDataArrayPromise = stocks.map((stock) => {
+        return getStockData(stock.code)
+          .then((stockDataRecord) => {
+            console.log('stock.ctrl.js > 59');
+            // console.log(stockDataRecord);
+            return {
+              _id: stock._id,
+              name: stock.name,
+              code: stock.code,
+              data: [ ...stockDataRecord ]
+            };
+          });
+        });
+
+      Promise.all(stockDataArrayPromise).then((stockDataArray) => {
+        console.log(`stock.ctrl.js > 67`);
+        // console.log(stockDataArray);
+        // res.data = stockDataArray;
+        // handleResponse(res);
+        res.status(200).json(stockDataArray);
+      });
+
+
+    })
     .catch(handleError(res));
 }
 
@@ -75,12 +101,15 @@ const getStockData = (stock) => {
         if (!data || data.quandl_error) {
           reject(data);
         } else {
-          resolve(data);
+          console.log('stock.ctrl.js > 96');
+          // console.log(data.dataset.data);
+          // return data;
+          resolve(data.dataset.data);
         }
 
       });
 
-      res.resume();
+      // res.resume();
     }).on('error', e => {
       reject(Error(e.message));
     })

@@ -32,13 +32,60 @@
 	border: 1px solid #ccc;
 	width: 32%;
 	margin: 20px 1%;
+	position: relative;
+}
+
+.app {
+	background-color: #444444;
+	padding: 40px;
 }
 
 
-.highcharts-container,
-.highcharts-root
+.highcharts-background
  {
-	font-family: 'Unica One', sans-serif !important;
+	padding: 20px;
+}
+
+.stock {
+	font-family: "Lato", sans-serif;
+	color: silver;
+
+	&__code {
+		font-size: 24px;
+		text-transform: uppercase;
+		font-weight: 700;
+	}
+
+	&__button {
+		padding: 6px;
+		font-size: 1.2em;
+		-webkit-appearance: none;
+	  appearance: none;
+	  border: none;
+	  background: transparent;
+	  color: silver;
+	  font-family: inherit;
+	  letter-spacing: inherit;
+	  text-transform: inherit;
+	  font-weight: inherit;
+	  cursor: pointer;
+	  position: absolute;
+	  top: 0;
+	  right: 5px;
+
+	  &:hover, &:active, &:focus {
+	    -webkit-appearance: none;
+	    appearance: none;
+	    border: none;
+	    background: transparent;
+	    color: white;
+	    font-family: inherit;
+	    letter-spacing: inherit;
+	    text-transform: inherit;
+	    font-weight: inherit;
+	    cursor: pointer;
+		}
+	}
 }
 
 

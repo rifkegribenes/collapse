@@ -1,8 +1,8 @@
 import React from "react";
 import Highcharts from 'highcharts/js/highstock';
 import {
-  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Title, Legend,
-  LineSeries, Navigator, RangeSelector, Tooltip
+  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Title,
+  Subtitle, Legend, LineSeries, Navigator, RangeSelector, Tooltip
 } from 'react-jsx-highstock';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -94,7 +94,7 @@ class Home extends React.Component {
           <Chart zoomType="x" />
 
           <Title>Collapse</Title>
-
+          <Subtitle>A front-row seat to the collapse of late capitalism. Featuring websockets so you can watch in real time with your friends.</Subtitle>
           <Legend>
             <Legend.Title>Key</Legend.Title>
           </Legend>
@@ -129,16 +129,16 @@ class Home extends React.Component {
             this.props.stock.stocks.map((stock) => {
             return (
               <div key={stock._id} className="card">
-                <p>{stock._id}</p>
-                <p>{stock.name}</p>
-                <p>{stock.code}</p>
-                <p>{stock.__v}</p>
+                <div className="stock stock__code">{stock.code}</div>
+                <div className="stock stock__name">{stock.name}</div>
                 <button
+                  className="stock__button"
+                  aria-label="remove stock"
                   onClick={
                     () => this.props.api.removeStock(stock._id)
                     .then()
                   }
-                >Remove</button>
+                >&times;</button>
               </div>
               )}) : "no stocks"
           }
