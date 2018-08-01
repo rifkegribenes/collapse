@@ -1,5 +1,5 @@
 import React from "react";
-import Highcharts from 'highcharts/highstock';
+import Highcharts from 'highcharts/js/highstock';
 import {
   HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Title, Legend,
   LineSeries, Navigator, RangeSelector, Tooltip
