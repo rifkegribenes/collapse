@@ -6,6 +6,8 @@ import {
 } from 'react-jsx-highstock';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+
+import Spinner from "./Spinner";
 import * as Actions from "../store/actions";
 import * as apiActions from "../store/actions/apiActions";
 
@@ -83,15 +85,15 @@ class Home extends React.Component {
     //   });
     // }
     return (
-      <div className="splash">
-        <h2 className="splash__header">
-         Here's the chart
+      <div className="home">
+        <Spinner cssClass={this.props.stock.spinnerClass} />
+        <h2 className="header">
         </h2>
         <div className="chart">
           <HighchartsStockChart>
           <Chart zoomType="x" />
 
-          <Title>Highstocks Example</Title>
+          <Title>Collapse</Title>
 
           <Legend>
             <Legend.Title>Key</Legend.Title>
@@ -122,24 +124,25 @@ class Home extends React.Component {
         </HighchartsStockChart>
 
         </div>
-        {this.props.stock.stocks.length ?
-          this.props.stock.stocks.map((stock) => {
-          return (
-            <div key={stock._id}>
-              <p>{stock._id}</p>
-              <p>{stock.name}</p>
-              <p>{stock.code}</p>
-              <p>{stock.__v}</p>
-              <button
-                onClick={
-                  () => this.props.api.removeStock(stock._id)
-                  .then()
-                }
-              >Remove</button>
-              <hr />
-            </div>
-            )}) : "no stocks"
-        }
+        <div className="row">
+          {this.props.stock.stocks.length ?
+            this.props.stock.stocks.map((stock) => {
+            return (
+              <div key={stock._id} className="card">
+                <p>{stock._id}</p>
+                <p>{stock.name}</p>
+                <p>{stock.code}</p>
+                <p>{stock.__v}</p>
+                <button
+                  onClick={
+                    () => this.props.api.removeStock(stock._id)
+                    .then()
+                  }
+                >Remove</button>
+              </div>
+              )}) : "no stocks"
+          }
+        </div>
       </div>
     );
   }
