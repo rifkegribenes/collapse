@@ -8,7 +8,7 @@
     "start": "webpack -d | node server.js",
     "client": "cd client && yarn build && yarn start",
     "sass": "cd client && yarn sass",
-    "server": "LOG_LEVEL=debug nodemon --inspect server.js",
+    "server": "LOG_LEVEL=debug nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\" \"yarn sass\""
   },
   "repository": {
@@ -33,6 +33,7 @@
     "mongoose": "^5.2.2",
     "morgan": "^1.9.0",
     "path": "^0.12.7",
+    "redux-socket.io": "^1.4.0",
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1"

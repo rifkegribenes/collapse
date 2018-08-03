@@ -3,7 +3,8 @@ import update from "immutability-helper";
 import {
   DISMISS_MODAL,
   SET_MODAL_ERROR,
-  SET_SPINNER
+  SET_SPINNER,
+  CHANGE_STOCK_CLIENT
 } from "../actions";
 import {
   VIEW_STOCK_REQUEST,
@@ -30,6 +31,8 @@ const INITIAL_STATE = {
     text: ""
   },
   stocks: [],
+  stockNames: [],
+  seriesArr: [],
   currentStock: {
     stockId: "",
     stockCode: "",
@@ -54,6 +57,17 @@ function stock(state = INITIAL_STATE, action) {
         },
         errorMsg: ""
       });
+
+    case CHANGE_STOCK_CLIENT:
+      if (action.payload.type === "add") {
+        return update(state, {
+          stockNames: { $push: action.payload.stock },
+        })
+      } else {
+        return update(state, {
+
+        })
+      }
 
     /*
     * Toggle spinner class (for social auth done with href

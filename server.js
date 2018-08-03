@@ -21,16 +21,34 @@ mongoose.Promise = global.Promise;
 const router = require('./router');
 router(app);
 
-// io.on('connection', function(socket) {
-// 	console.log('New client connected');
-// 	socket.emit('stocks', { stocks: ['GOOGL', 'APPL'] });
-// 	socket.on('my other event', function(data) {
-// 		console.log(data);
-// 	});
-// 	socket.on('disconnect', function() {
-// 		console.log('Client disconnected');
-// 	});
-// });
+io.on('connection', (socket) => {
+  console.log("Socket connected: " + socket.id);
+  socket.on('action', (action) => {
+    if (action.type === 'server/addStock') {
+    	console.log(`addStock`);
+    	let name = action.data.toUpperCase();
+      let stockItem = new Stock({ name });
+			stockItem.save()
+				.then(() => {
+					console.log(`Added new stock ${name}!`);
+					socket.broadcast.emit('action', {type:'addStock', data: name});
+				})
+				.catch((err) => console.log(`server.js > 33 ${err}`));
+			} else if (action.type === 'server/removeStock') {
+				console.log(`removeStock`);
+    		let name = action.data.toUpperCase();
+				Stock.remove({ name })
+				.then(() => {
+					console.log(`Removed stock ${name}!`);
+					socket.broadcast.emit('action', {type:'removeStock', data: name});
+				})
+				.catch((err) => console.log(`server.js > 45 ${err}`));
+			}
+		});
+	socket.on('disconnect', function() {
+		console.log("Client disconnected: " + socket.id);
+	});
+});
 
 // launch ======================================================================
 var port = process.env.PORT || 3001;

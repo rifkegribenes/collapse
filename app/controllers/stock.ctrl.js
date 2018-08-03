@@ -2,6 +2,7 @@ const Stock = require('../models/stock.model');
 const merge = require('lodash.merge');
 const https = require('https');
 
+
 const handleError = (res, statusCode) => {
   const status = statusCode || 500;
   return (err) => {
@@ -129,43 +130,22 @@ exports.addStock = (req, res) => {
   if (!req.params.stock) {
     return res.status(400).json({ message: 'Stock not found.' });
   }
+  // look for stock in DB
+  Stock.find({ name: req.params.stock })
+    .then((stock) => {
 
-  https.get(`https://www.quandl.com/api/v3/datasets/WIKI/${req.params.stock.toUpperCase()}/metadata.json`, (res2) => {
-    let data = '';
-
-    res2.on('data', (chunk) => {
-      data += chunk
-    });
-
-    res2.on('end', () => {
-      data = JSON.parse(data);
-
-      res
-        .status(res2.statusCode)
-        .end();
-
-      if (parseInt(res2.statusCode / 100) === 2) {
-        const code = data.dataset.dataset_code;
-
-        // look for stock in DB by code
-        Stock.find({ code })
-          .then((stock) => {
-
-            // if stock already exists in DB, return
-            if (stock.length) {
-              return;
-            }
-
-            // otherwise, create new record in mongo
-            Stock.create({
-              name: data.dataset.name,
-              code: data.dataset.dataset_code
-            });
-
-          });
+      // if stock already exists in mongo, return
+      if (stock.length) {
+        return;
       }
-    });
-  }).on('error', (err) => {
+
+      // otherwise, create new record in mongo
+      Stock.create({
+        name: req.params.stock
+      });
+
+    })
+  .catch((err) => {
     return res.status(400).json({ message: err });
   });
 }

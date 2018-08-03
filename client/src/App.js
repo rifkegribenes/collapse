@@ -7,12 +7,7 @@ import './App.css';
 
 import Home from './containers/Home';
 import AddStock from './containers/AddStock';
-// import Header from "./containers/Header";
-// import Home from "./containers/Home";
-// import Footer from "./containers/Footer";
-// import NotFound from "./containers/NotFound";
-// import Spinner from "./containers/Spinner";
-// import ModalSm from "./containers/ModalSm";
+// import Socket from './containers/Socket';
 
 import * as apiActions from "./store/actions/apiActions";
 import * as Actions from "./store/actions";

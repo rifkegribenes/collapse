@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import Spinner from "./Spinner";
+import Socket from './Socket';
 import * as Actions from "../store/actions";
 import * as apiActions from "../store/actions/apiActions";
 
@@ -21,21 +22,45 @@ const colors = [
 
 class Home extends React.Component {
   componentDidMount() {
+    this.socket = new Socket();
+    this.socket.onStockChange(this.stockChangeServer);
     this.props.api.getAllStocks()
-      // .then((result) => console.log(result));
-    // OR
-    // load placeholder data
+      .then((result) => console.log(result));
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.stock.stocks.length !== this.props.stock.stocks.length) {
-  //     console.log('stocks array changed:');
-  //     console.log(`${this.props.stock.stocks.length} => ${nextProps.stock.stocks.length}`);
-  //     this.props.api.getAllStocks()
-  //       // .then(() => this.forceUpdate());
-  //   }
-  // }
-  //
+  stockChangeServer = (method, series) => {
+    console.log('stockChangeServer');
+    return (method === 'delete') ? this.removeSeries(series) : this.addSeries(series);
+  }
+
+  addSeries = (series) => {
+    console.log('addSeries');
+    const seriesArr = this.props.stock.stocks.map(stock => stock.data);
+    const stockNames = this.state.stock.stocks.map(stock => stock.name);
+    if (!stockNames.includes(series.name)) {
+      stockNames.push(series.name);
+      seriesArr.push(series)
+      this.setState({ seriesArr, stockNames });
+      this.state.chart.add(series);
+    }
+  }
+
+  removeSeries = (seriesName) => {
+    console.log('removeSeries');
+    const seriesArr = this.props.stock.stocks.map(stock => stock.data);
+    const stockNames = this.state.stock.stocks.map(stock => stock.name);
+    //  find  the index
+    const stockIndex = stockNames.findIndex((name) => (name === seriesName));
+    const seriesIndex = stockNames.findIndex((series) => (series.name === seriesName));
+
+    stockNames.splice(stockIndex, 1);
+    seriesArr.splice(seriesIndex, 1)
+
+    this.setState({ seriesArr, stockNames });
+
+    this.state.chart.update(this.state.series);
+  }
+
   getSeries(chartData) {
     console.log(chartData);
     return chartData.map((data, i) => {
@@ -53,37 +78,6 @@ class Home extends React.Component {
   }
 
   render() {
-    // let stocklist = "no stocks";
-    // if (this.props.stock.stocks.length) {
-    //   stocklist = this.props.stock.stocks.map((stock) => {
-    //     return (
-    //       <div key={stock._id}>
-    //         <p>{stock._id}</p>
-    //         <p>{stock.name}</p>
-    //         <p>{stock.code}</p>
-    //         <p>{stock.__v}</p>
-    //         <button
-    //           onClick={
-    //             () => this.props.api.removeStock(stock._id)
-    //             .then(() => this.props.api.getAllStocks())
-    //           }
-    //         >Remove</button>
-    //         <hr />
-    //       </div>
-    //       );
-    //   });
-    // }
-    // let data = [];
-    // if (this.props.stock.stocks.length) {
-    //   console.log(this.props.stock.stocks);
-    //   data = this.props.stock.stocks.map((stock) => {
-    //     this.props.api.viewStock(stock.code)
-    //       .then(() => {
-    //         console.log(this.props.stock.currentStock.stockData)
-    //         return this.props.stock.currentStock.stockData;
-    //       });
-    //   });
-    // }
     return (
       <div className="home">
         <Spinner cssClass={this.props.stock.spinnerClass} />
@@ -91,7 +85,9 @@ class Home extends React.Component {
         </h2>
         <div className="chart">
           <HighchartsStockChart>
-          <Chart zoomType="x" />
+          <Chart
+            zoomType="x"
+          />
 
           <Title>Collapse</Title>
           <Subtitle>A front-row seat to the collapse of late capitalism. Featuring websockets so you can watch in real time with your friends.</Subtitle>
@@ -107,7 +103,7 @@ class Home extends React.Component {
             <RangeSelector.Input boxBorderColor="#7cb5ec" />
           </RangeSelector>
 
-          <Tooltip />
+          <Tooltip shared />
 
           <XAxis>
             <XAxis.Title>Time</XAxis.Title>
@@ -118,9 +114,9 @@ class Home extends React.Component {
             {this.props.stock.stocks.length ? this.getSeries(this.props.stock.stocks) : null}
           </YAxis>
 
-          <Navigator>
-            <Navigator.Series seriesId="profit" />
-          </Navigator>
+          <Navigator />
+{/*            <Navigator.Series seriesId="profit" />
+          </Navigator>*/}
         </HighchartsStockChart>
 
         </div>
