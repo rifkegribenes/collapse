@@ -66,16 +66,19 @@ exports.getAllStocks = (req, res) => {
               code: stock.code,
               data: [ ...stockDataRecord ]
             };
-          });
+          })
+          .catch(err => console.log(`stock.ctrl.js > 70: ${err}`));
         });
 
-      Promise.all(stockDataArrayPromise).then((stockDataArray) => {
-        console.log(`stock.ctrl.js > 67`);
-        // console.log(stockDataArray);
-        // res.data = stockDataArray;
-        // handleResponse(res);
-        res.status(200).json(stockDataArray);
-      });
+      Promise.all(stockDataArrayPromise)
+        .then((stockDataArray) => {
+          console.log(`stock.ctrl.js > 67`);
+          // console.log(stockDataArray);
+          // res.data = stockDataArray;
+          // handleResponse(res);
+          res.status(200).json(stockDataArray);
+        })
+        .catch(err => console.log(`stock.ctrl.js > 80: ${err}`));
 
 
     })

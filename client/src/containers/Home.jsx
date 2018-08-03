@@ -64,16 +64,20 @@ class Home extends React.Component {
   getSeries(chartData) {
     console.log(chartData);
     return chartData.map((data, i) => {
-      return (
-        <LineSeries
-          key={i}
-          id={i}
-          name={data.code}
-          step
-          color={colors[i]}
-          data={data.data}
-        />
-      )
+      if (data) {
+        return (
+          <LineSeries
+            key={i}
+            id={i}
+            name={data.code}
+            step
+            color={colors[i]}
+            data={data.data}
+          />
+        )
+      } else {
+        return null;
+      }
     })
   }
 
@@ -123,20 +127,25 @@ class Home extends React.Component {
         <div className="row">
           {this.props.stock.stocks.length ?
             this.props.stock.stocks.map((stock) => {
-            return (
-              <div key={stock._id} className="card">
-                <div className="stock stock__code">{stock.code}</div>
-                <div className="stock stock__name">{stock.name}</div>
-                <button
-                  className="stock__button"
-                  aria-label="remove stock"
-                  onClick={
-                    () => this.props.api.removeStock(stock._id)
-                    .then()
-                  }
-                >&times;</button>
-              </div>
-              )}) : "no stocks"
+              if (stock) {
+                return (
+                  <div key={stock._id} className="card">
+                    <div className="stock stock__code">{stock.code}</div>
+                    <div className="stock stock__name">{stock.name}</div>
+                    <button
+                      className="stock__button"
+                      aria-label="remove stock"
+                      onClick={
+                        () => this.props.api.removeStock(stock._id)
+                        .then()
+                      }
+                    >&times;</button>
+                  </div>
+                  )
+              } else {
+                return "no stocks";
+              }
+            }) : "no stocks"
           }
         </div>
       </div>
