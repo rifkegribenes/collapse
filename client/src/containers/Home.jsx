@@ -163,7 +163,16 @@ class Home extends React.Component {
                       aria-label="remove stock"
                       onClick={
                         () => this.props.api.removeStock(stock._id)
-                        .then()
+                          .then((result) => {
+                            console.log(result);
+                            this.props.api.getAllStocks()
+                            .then((result) => {
+                              console.log('removed');
+                              // this.socket.stockChange('add', this.state.input);
+                              console.log(this.props.stock.stocks);
+                              this.clearInput();
+                            })
+                          })
                       }
                     >&times;</button>
                   </div>
