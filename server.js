@@ -3,16 +3,17 @@
 // set up ======================================================================
 var express = require('express');
 var app = express();
+const middleware = require('./middleware');
+app.use(middleware);
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 require('dotenv').load();
 const favicon = require('serve-favicon');
-const middleware = require('./middleware');
 var mongoose = require('mongoose');
 var https = require('https');
 var configDB = require('./app/config/database.js');
 
-app.use(middleware);
+
 
 mongoose.connect(configDB.url, configDB.options); // connect to db
 mongoose.Promise = global.Promise;
@@ -20,6 +21,16 @@ mongoose.Promise = global.Promise;
 // routes ======================================================================
 const router = require('./router');
 router(app);
+
+// launch ======================================================================
+var port = process.env.PORT || 3001;
+server.listen(port,  function () {
+	console.log('Node.js listening on port ' + port + '...');
+});
+
+// server.listen(0, () => {
+// 	console.log('Node.js listening on port ' + server.address().port + '...');
+// });
 
 io.on('connection', (socket) => {
   console.log("Socket connected: " + socket.id);
@@ -50,8 +61,4 @@ io.on('connection', (socket) => {
 	});
 });
 
-// launch ======================================================================
-var port = process.env.PORT || 3001;
-app.listen(port,  function () {
-	console.log('Node.js listening on port ' + port + '...');
-});
+

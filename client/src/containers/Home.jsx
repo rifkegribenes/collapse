@@ -143,7 +143,7 @@ class Home extends React.Component {
                   </div>
                   )
               } else {
-                return "no stocks";
+                return null;
               }
             }) : "no stocks"
           }
