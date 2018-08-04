@@ -6,7 +6,6 @@ import { bindActionCreators } from "redux";
 import './App.css';
 
 import Home from './containers/Home';
-import AddStock from './containers/AddStock';
 // import Socket from './containers/Socket';
 
 import * as apiActions from "./store/actions/apiActions";
@@ -49,7 +48,6 @@ class App extends Component {
     return (
       <div className="app">
         <Home />
-        <AddStock />
       </div>
     );
   }

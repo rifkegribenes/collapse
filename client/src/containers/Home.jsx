@@ -21,16 +21,42 @@ const colors = [
 ];
 
 class Home extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: "",
+      seriesArr: [],
+      stockNames: [],
+      chart: null
+    }
+  }
+
   componentDidMount() {
     this.socket = new Socket();
     this.socket.onStockChange(this.stockChangeServer);
     this.props.api.getAllStocks()
-      .then((result) => console.log(result));
+      .then((result) => {
+        console.log(result);
+        console.log(this.props.stock.stocks);
+      });
   }
 
   stockChangeServer = (method, series) => {
     console.log('stockChangeServer');
     return (method === 'delete') ? this.removeSeries(series) : this.addSeries(series);
+  }
+
+  handleInput(e) {
+    this.setState({
+      input: e.target.value
+    });
+  }
+
+  clearInput() {
+    this.setState({
+      input: ""
+    });
   }
 
   addSeries = (series) => {
@@ -62,7 +88,7 @@ class Home extends React.Component {
   }
 
   getSeries(chartData) {
-    console.log(chartData);
+    // console.log(chartData);
     return chartData.map((data, i) => {
       if (data) {
         return (
@@ -147,6 +173,32 @@ class Home extends React.Component {
               }
             }) : "no stocks"
           }
+        </div>
+        <div className="add">
+          <input
+            className="add__input"
+            type="text"
+            placeholder="Stock code"
+            value={this.state.input}
+            onChange={(e) => this.handleInput(e)}
+            />
+          <button
+            className="add__button"
+            type="button"
+            onClick={() => {
+              console.log('add');
+              this.props.api.addStock(this.state.input)
+              .then((result) => {
+                console.log(result);
+                console.log('added');
+                // this.socket.stockChange('add', this.state.input);
+                console.log(this.props.stock.stocks);
+                this.clearInput();
+              })
+            }}
+            >
+            Add
+          </button>
         </div>
       </div>
     );

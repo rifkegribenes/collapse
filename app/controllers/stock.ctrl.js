@@ -129,26 +129,57 @@ exports.getOneStock = (req, res) => {
 
 // add stock to mongo
 exports.addStock = (req, res) => {
+  console.log(`stock.ctrl.js > 132`);
 
   if (!req.params.stock) {
+    console.log(`stock.ctrl.js > 135`);
     return res.status(400).json({ message: 'Stock not found.' });
   }
-  // look for stock in DB
-  Stock.find({ name: req.params.stock })
-    .then((stock) => {
 
-      // if stock already exists in mongo, return
-      if (stock.length) {
-        return;
+  https.get(`https://www.quandl.com/api/v3/datasets/WIKI/${req.params.stock.toUpperCase()}/metadata.json`, (res2) => {
+    let data = '';
+
+    res2.on('data', (chunk) => {
+      data += chunk
+    });
+
+    res2.on('end', () => {
+      data = JSON.parse(data);
+
+      // res
+      //   .status(res2.statusCode)
+      //   .end();
+
+      if (parseInt(res2.statusCode / 100) === 2) {
+        const code = data.dataset.dataset_code;
+        console.log(`stock.ctrl.js > 155`);
+
+        // look for stock in DB by code
+        Stock.find({ code })
+          .then((stock) => {
+
+            // if stock already exists in DB, return
+            if (stock.length) {
+              console.log(`stock.ctrl.js > 163`);
+              return res.status(200).json({ message: `Stock ${code} already in chart` });;
+            }
+
+            // otherwise, create new record in mongo
+            Stock.create({
+              name: data.dataset.name,
+              code: data.dataset.dataset_code
+            });
+            console.log(`stock.ctrl.js > 172`);
+            return res.status(200).json({ message: `Added stock ${code}.` });;
+
+          });
+      } else {
+        return res
+          .status(res2.statusCode)
+          .end();
       }
-
-      // otherwise, create new record in mongo
-      Stock.create({
-        name: req.params.stock
-      });
-
-    })
-  .catch((err) => {
+    });
+  }).on('error', (err) => {
     return res.status(400).json({ message: err });
   });
 }
