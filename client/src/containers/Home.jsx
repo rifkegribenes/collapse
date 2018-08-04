@@ -190,10 +190,13 @@ class Home extends React.Component {
               this.props.api.addStock(this.state.input)
               .then((result) => {
                 console.log(result);
-                console.log('added');
-                // this.socket.stockChange('add', this.state.input);
-                console.log(this.props.stock.stocks);
-                this.clearInput();
+                this.props.api.getAllStocks()
+                .then((result) => {
+                  console.log('added');
+                  // this.socket.stockChange('add', this.state.input);
+                  console.log(this.props.stock.stocks);
+                  this.clearInput();
+                })
               })
             }}
             >

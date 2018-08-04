@@ -1,19 +1,17 @@
 'use strict';
 
 // set up ======================================================================
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 const middleware = require('./middleware');
 app.use(middleware);
-const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const http = require('http');
 require('dotenv').load();
 const favicon = require('serve-favicon');
-var mongoose = require('mongoose');
-var https = require('https');
-var configDB = require('./app/config/database.js');
-
-
+const mongoose = require('mongoose');
+const https = require('https');
+const configDB = require('./app/config/database.js');
+const socket = require('socket.io');
 
 mongoose.connect(configDB.url, configDB.options); // connect to db
 mongoose.Promise = global.Promise;
@@ -22,17 +20,21 @@ mongoose.Promise = global.Promise;
 const router = require('./router');
 router(app);
 
-// launch ======================================================================
-var port = process.env.PORT || 3001;
-server.listen(port,  function () {
-	console.log('Node.js listening on port ' + port + '...');
-});
-
 // server.listen(0, () => {
 // 	console.log('Node.js listening on port ' + server.address().port + '...');
 // });
+//
 
-io.on('connection', (socket) => {
+const port = process.env.PORT || 3001;
+
+const server = http.createServer(app).listen(port, () => {
+  console.log('Node.js listening on port ' + port + '...');
+});
+
+// const io = socket.listen(server);
+var io = require('socket.io')(server);
+
+io.sockets.on('connection', (socket) => {
   console.log("Socket connected: " + socket.id);
   socket.on('action', (action) => {
     if (action.type === 'server/addStock') {
@@ -61,4 +63,8 @@ io.on('connection', (socket) => {
 	});
 });
 
-
+// launch ======================================================================
+// var port = process.env.PORT || 3001;
+// server.listen(port,  function () {
+// 	console.log('Node.js listening on port ' + port + '...');
+// });

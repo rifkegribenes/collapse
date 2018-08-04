@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 export default class Socket {
   constructor() {
     const origin = window.location.origin;
-    const url = (origin.includes('localhost')) ? 'http://localhost:3000/' : origin
+    const url = (origin.includes('localhost')) ? 'http://localhost:3001/' : origin
     this.socket = io(url);
   }
 
