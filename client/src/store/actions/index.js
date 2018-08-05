@@ -3,11 +3,18 @@ export const SET_MODAL_ERROR = "SET_MODAL_ERROR";
 export const SET_SPINNER = "SET_SPINNER";
 export const SET_WINDOW_SIZE = "SET_WINDOW_SIZE";
 export const CHANGE_STOCK_CLIENT = "CHANGE_STOCK_CLIENT";
+export const TOGGLE_REFRESH = "TOGGLE_REFRESH";
 
 export function setSpinner(spinnerClass) {
   return {
     type: SET_SPINNER,
     payload: spinnerClass
+  };
+}
+
+export function toggleRefresh() {
+  return {
+    type: TOGGLE_REFRESH
   };
 }
 

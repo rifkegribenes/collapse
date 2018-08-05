@@ -57,21 +57,28 @@ const getContent = (url) => {
 
 // const io = socket.listen(server);
 var io = require('socket.io')(server);
+const Stock = require('./app/models/stock.model');
 
 io.on('connection', (socket) => {
   console.log("Socket connected: " + socket.id);
+  let stockCode;
   socket.on('action', (action) => {
     if (action.type === 'server/addStock') {
     	 console.log(`server.js > 41`);
+    	 console.log(action);
+    	 stockCode = action.data;
 			  if (!action.data) {
 			    console.log(`stock.ctrl.js > 135`);
-			    return res.status(400).json({ message: 'Stock not found.' });
+			    stockCode = action.payload.data;
 			  }
-
-			 getContent(`https://www.quandl.com/api/v3/datasets/WIKI/${action.data.toUpperCase()}/metadata.json`)
+			 console.log(`server.js > 73: ${stockCode}`);
+			 getContent(`https://www.quandl.com/api/v3/datasets/WIKI/${stockCode.toUpperCase()}/metadata.json`)
 			 		.then((data) => {
-			 				const code = data.dataset.dataset_code;
-			        console.log(`server.js > 72`);
+			 				console.log(`server.js > 76`);
+			 				console.log(data);
+			 				console.log(data[dataset]);
+			 				const code = data[dataset].dataset_code;
+
 
 			        // look for stock in DB by code
 			        Stock.find({ code })
@@ -89,7 +96,7 @@ io.on('connection', (socket) => {
 			              code: data.dataset.dataset_code
 			            })
 			            .then(() => {
-			            	socket.broadcast.emit('action', {type:'addStock', data: code });
+			            	socket.broadcast.emit('action', {type:'getallStocks'});
 			            	console.log(`server.js > 83`);
 			            	return res.status(200).json({ message: `Added stock ${code}.` });
 			            })
@@ -100,17 +107,23 @@ io.on('connection', (socket) => {
 			    })
 			    .catch(err => {
 			    	console.log(`server.js > 99 ${err}`)
-			    	return res.status(400).json({ message: err });
 			    });
 			} else if (action.type === 'server/removeStock') {
 				console.log(`removeStock`);
-    		const code = action.data.toUpperCase();
+				console.log(action);
+				stockCode = action.data;
+			  if (!action.data) {
+			    console.log(`stock.ctrl.js > 113`);
+			    stockCode = action.payload.data;
+			  }
+    		const code = stockCode.toUpperCase();
 				Stock.remove({ code })
 				.then(() => {
-					console.log(`Removed stock ${name}!`);
-					socket.broadcast.emit('action', {type:'removeStock', data: code });
+					console.log(`Removed stock ${code}!`);
+
+					socket.broadcast.emit('action', {type:'getallStocks'});
 				})
-				.catch((err) => console.log(`server.js > 45 ${err}`));
+				.catch((err) => console.log(`server.js > 126 ${err}`));
 			}
 		});
 	socket.on('disconnect', function() {

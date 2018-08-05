@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import Spinner from "./Spinner";
-import Socket from './Socket';
+// import Socket from './Socket';
 import * as Actions from "../store/actions";
 import * as apiActions from "../store/actions/apiActions";
 
@@ -33,8 +33,8 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.socket = new Socket();
-    this.socket.onStockChange(this.stockChangeServer);
+    // this.socket = new Socket();
+    // this.socket.onStockChange(this.stockChangeServer);
     this.props.api.getAllStocks()
       .then((result) => {
         console.log(result);
@@ -42,11 +42,23 @@ class Home extends React.Component {
       });
   }
 
-  stockChangeServer = (method, series) => {
-    console.log('stockChangeServer');
-    console.log(method);
-    return (method === 'delete') ? this.removeSeries(series) : this.addSeries(series);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.stock.refresh && !this.props.stock.refresh) {
+      this.props.api.getAllStocks()
+      .then((result) => {
+        console.log(result);
+        console.log(this.props.stock.stocks);
+        this.props.actions.toggleRefresh();
+      });
+    }
+
   }
+
+  // stockChangeServer = (method, series) => {
+  //   console.log('stockChangeServer');
+  //   console.log(method);
+  //   return (method === 'delete') ? this.removeSeries(series) : this.addSeries(series);
+  // }
 
   handleInput(e) {
     this.setState({
@@ -60,33 +72,33 @@ class Home extends React.Component {
     });
   }
 
-  addSeries = (series) => {
-    console.log('addSeries');
-    const seriesArr = this.props.stock.stocks.map(stock => stock.data);
-    const stockNames = this.state.stock.stocks.map(stock => stock.name);
-    if (!stockNames.includes(series.name)) {
-      stockNames.push(series.name);
-      seriesArr.push(series)
-      this.setState({ seriesArr, stockNames });
-      this.state.chart.add(series);
-    }
-  }
+  // addSeries = (series) => {
+  //   console.log('addSeries');
+  //   const seriesArr = this.props.stock.stocks.map(stock => stock.data);
+  //   const stockNames = this.state.stock.stocks.map(stock => stock.name);
+  //   if (!stockNames.includes(series.name)) {
+  //     stockNames.push(series.name);
+  //     seriesArr.push(series)
+  //     this.setState({ seriesArr, stockNames });
+  //     this.state.chart.add(series);
+  //   }
+  // }
 
-  removeSeries = (seriesName) => {
-    console.log('removeSeries');
-    const seriesArr = this.props.stock.stocks.map(stock => stock.data);
-    const stockNames = this.state.stock.stocks.map(stock => stock.name);
-    //  find  the index
-    const stockIndex = stockNames.findIndex((name) => (name === seriesName));
-    const seriesIndex = stockNames.findIndex((series) => (series.name === seriesName));
+  // removeSeries = (seriesName) => {
+  //   console.log('removeSeries');
+  //   const seriesArr = this.props.stock.stocks.map(stock => stock.data);
+  //   const stockNames = this.state.stock.stocks.map(stock => stock.name);
+  //   //  find  the index
+  //   const stockIndex = stockNames.findIndex((name) => (name === seriesName));
+  //   const seriesIndex = stockNames.findIndex((series) => (series.name === seriesName));
 
-    stockNames.splice(stockIndex, 1);
-    seriesArr.splice(seriesIndex, 1)
+  //   stockNames.splice(stockIndex, 1);
+  //   seriesArr.splice(seriesIndex, 1)
 
-    this.setState({ seriesArr, stockNames });
+  //   this.setState({ seriesArr, stockNames });
 
-    this.state.chart.update(this.state.series);
-  }
+  //   this.state.chart.update(this.state.series);
+  // }
 
   getSeries(chartData) {
     // console.log(chartData);
@@ -169,12 +181,12 @@ class Home extends React.Component {
                             this.props.api.getAllStocks()
                             .then((result) => {
                               console.log('removed');
-                              this.socket.stockChange('remove');
+                              // this.socket.stockChange('remove');
                               console.log(this.props.stock.stocks);
                               this.clearInput();
                             })
                           })
-                      }
+                        }
                     >&times;</button>
                   </div>
                   )
@@ -198,17 +210,17 @@ class Home extends React.Component {
             onClick={() => {
               console.log('add');
               this.props.api.addStock(this.state.input)
-              .then((result) => {
-                console.log(result);
-                this.props.api.getAllStocks()
                 .then((result) => {
-                  console.log('added');
-                  this.socket.stockChange('add', this.state.input);
-                  console.log(this.props.stock.stocks);
-                  this.clearInput();
+                  console.log(result);
+                  this.props.api.getAllStocks()
+                  .then((result) => {
+                    console.log('added');
+                    // this.socket.stockChange('add', this.state.input);
+                    console.log(this.props.stock.stocks);
+                    this.clearInput();
+                  })
                 })
-              })
-            }}
+              }}
             >
             Add
           </button>

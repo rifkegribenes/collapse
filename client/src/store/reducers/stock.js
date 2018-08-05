@@ -4,12 +4,9 @@ import {
   DISMISS_MODAL,
   SET_MODAL_ERROR,
   SET_SPINNER,
-  CHANGE_STOCK_CLIENT
+  TOGGLE_REFRESH
 } from "../actions";
 import {
-  VIEW_STOCK_REQUEST,
-  VIEW_STOCK_SUCCESS,
-  VIEW_STOCK_FAILURE,
   GET_ALL_STOCKS_REQUEST,
   GET_ALL_STOCKS_SUCCESS,
   GET_ALL_STOCKS_FAILURE,
@@ -31,21 +28,14 @@ const INITIAL_STATE = {
     text: ""
   },
   stocks: [],
-  stockNames: [],
-  seriesArr: [],
-  currentStock: {
-    stockId: "",
-    stockCode: "",
-    stockData: []
-  }
+  refresh: false
 };
 
 function stock(state = INITIAL_STATE, action) {
   let error;
-  let data;
+  // let data;
   switch (action.type) {
 
-    case VIEW_STOCK_REQUEST:
     case GET_ALL_STOCKS_REQUEST:
     case ADD_STOCK_REQUEST:
     case REMOVE_STOCK_REQUEST:
@@ -55,19 +45,9 @@ function stock(state = INITIAL_STATE, action) {
           class: "modal__hide",
           text: ""
         },
-        errorMsg: ""
+        errorMsg: "",
+        refresh: false
       });
-
-    case CHANGE_STOCK_CLIENT:
-      if (action.payload.type === "add") {
-        return update(state, {
-          stockNames: { $push: action.payload.stock },
-        })
-      } else {
-        return update(state, {
-
-        })
-      }
 
     /*
     * Toggle spinner class (for social auth done with href
@@ -119,35 +99,36 @@ function stock(state = INITIAL_STATE, action) {
       });
 
     case ADD_STOCK_SUCCESS:
+    case "server/addStock":
+    case "server/removeStock":
     case REMOVE_STOCK_SUCCESS:
 
       return update(state, {
         spinnerClass: { $set: "spinner__hide" },
         modal: {
           class: { $set: "modal__hide" }
-        }
-      });
-
-    case VIEW_STOCK_SUCCESS:
-      console.log(action.payload.dataset.data);
-      data = [ ...action.payload.dataset.data ];
-      return update(state, {
-        spinnerClass: { $set: "spinner__hide" },
-        modal: {
-          class: { $set: "modal__hide" }
         },
-        currentStock: {
-          stockId: { $set: action.payload.id },
-          stockCode: { $set: action.payload.dataset.dataset_code },
-          stockData: { $set: data }
-        }
+        refresh: { $set: false }
       });
 
-    /*
-    *  Called from: <App />
-    *  Payload: array of stock objects
-    *  Purpose: Display stocks
-    */
+   case TOGGLE_REFRESH:
+      return Object.assign({}, state, {
+        spinnerClass: "spinner__hide",
+        modal: {
+          class: "modal__hide"
+        },
+       refresh: false
+      });
+
+   case 'getallStocks':
+      console.log(action.payload);
+      return Object.assign({}, state, {
+        spinnerClass: "spinner__hide",
+        modal: {
+          class: "modal__hide"
+        },
+       refresh: true
+      });
 
     case GET_ALL_STOCKS_SUCCESS:
       console.log(action.payload);
@@ -156,7 +137,8 @@ function stock(state = INITIAL_STATE, action) {
         modal: {
           class: "modal__hide"
         },
-        stocks: [...action.payload]
+        stocks: [...action.payload],
+        refresh: false
       });
 
     /*
@@ -183,7 +165,6 @@ function stock(state = INITIAL_STATE, action) {
         }
       });
 
-    case VIEW_STOCK_FAILURE:
     case REMOVE_STOCK_FAILURE:
     case ADD_STOCK_FAILURE:
       if (typeof action.payload.message === "string") {

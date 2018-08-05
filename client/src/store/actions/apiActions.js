@@ -114,7 +114,10 @@ export function addStock(code) {
       method: "PUT",
       types: [
         ADD_STOCK_REQUEST,
-        ADD_STOCK_SUCCESS,
+        {
+          type: "server/addStock",
+          payload: { data: code }
+        },
         {
           type: ADD_STOCK_FAILURE,
           payload: (action, state, res) => {
@@ -155,7 +158,10 @@ export function removeStock(code) {
       method: "PUT",
       types: [
         REMOVE_STOCK_REQUEST,
-        REMOVE_STOCK_SUCCESS,
+        {
+          type: "server/removeStock",
+          payload: { data: code }
+        },
         {
           type: REMOVE_STOCK_FAILURE,
           payload: (action, state, res) => {
