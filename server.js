@@ -75,10 +75,11 @@ io.on('connection', (socket) => {
 			 getContent(`https://www.quandl.com/api/v3/datasets/WIKI/${stockCode.toUpperCase()}/metadata.json`)
 			 		.then((data) => {
 			 				console.log(`server.js > 76`);
-			 				console.log(data);
-			 				console.log(data[dataset]);
-			 				const code = data[dataset].dataset_code;
-
+			 				let code = stockCode.toUpperCase();
+			 				if (data.dataset) {
+			 					code = data.dataset.dataset_code;
+			 				}
+			 				console.log(code);
 
 			        // look for stock in DB by code
 			        Stock.find({ code })
@@ -86,8 +87,11 @@ io.on('connection', (socket) => {
 
 			            // if stock already exists in DB, return
 			            if (stock.length) {
-			              console.log(`stock.ctrl.js > 163`);
-			              return res.status(200).json({ message: `Stock ${code} already in chart` });;
+			              console.log(`stock.ctrl.js > 90`);
+			              console.log(`Stock ${code} already in chart`);
+			              socket.broadcast.emit('action', {type:'getallStocks'});
+			            	console.log(`server.js > 93`);
+			            	return;
 			            }
 
 			            // otherwise, create new record in mongo
@@ -98,7 +102,6 @@ io.on('connection', (socket) => {
 			            .then(() => {
 			            	socket.broadcast.emit('action', {type:'getallStocks'});
 			            	console.log(`server.js > 83`);
-			            	return res.status(200).json({ message: `Added stock ${code}.` });
 			            })
 			            .catch(err => console.log(`server.js > 85 ${err}`));
 
