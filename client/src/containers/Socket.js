@@ -9,10 +9,15 @@ export default class Socket {
   }
 
   stockChange(method, data) {
+    console.log(method);
+    console.log(data);
+
     this.socket.emit('stock change', method, data);
   }
 
-  onStockChange(callback) {
-    this.socket.on('stock changed', callback)
+  onStockChange(callback, data) {
+    console.log(callback);
+    console.log(data);
+    this.socket.on('stock changed', callback, data);
   }
 }
