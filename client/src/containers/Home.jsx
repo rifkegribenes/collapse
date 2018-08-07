@@ -69,7 +69,11 @@ class Home extends React.Component {
             name={data.code}
             step
             color={colors[i]}
-            data={data.data}
+            data={data.data.reverse().map(info => {
+          return [
+            (new Date(info[0])).getTime(),
+            info[1]
+          ];})}
           />
         )
       } else {
@@ -88,6 +92,7 @@ class Home extends React.Component {
           <HighchartsStockChart>
           <Chart
             zoomType="x"
+            height="400"
           />
 
           <Title>Collapse</Title>
@@ -106,7 +111,13 @@ class Home extends React.Component {
 
           <Tooltip shared />
 
-          <XAxis>
+          <XAxis
+            dateTimeLabelFormats={{
+              day: '%b %e',
+              week: '%b %e'
+            }}
+            type='datetime'
+        >
             <XAxis.Title>Time</XAxis.Title>
           </XAxis>
 
@@ -115,9 +126,6 @@ class Home extends React.Component {
             {this.props.stock.stocks.length ? this.getSeries(this.props.stock.stocks) : null}
           </YAxis>
 
-          <Navigator />
-{/*            <Navigator.Series seriesId="profit" />
-          </Navigator>*/}
         </HighchartsStockChart>
 
         </div>
