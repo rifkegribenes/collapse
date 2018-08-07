@@ -33,7 +33,7 @@ const INITIAL_STATE = {
 
 function stock(state = INITIAL_STATE, action) {
   let error;
-  // let data;
+
   switch (action.type) {
 
     case GET_ALL_STOCKS_REQUEST:
@@ -49,10 +49,6 @@ function stock(state = INITIAL_STATE, action) {
         refresh: false
       });
 
-    /*
-    * Toggle spinner class (for social auth done with href
-    * rather than API call)
-    */
     case SET_SPINNER:
       return Object.assign({}, state, {
         spinnerClass: `spinner__${action.payload}`

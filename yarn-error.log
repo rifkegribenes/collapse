@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/Cellar/node/10.0.0/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js dev
+  /usr/local/Cellar/node/10.0.0/bin/node /usr/local/Cellar/yarn/1.5.1_1/libexec/bin/yarn.js server
 
 PATH: 
-  /Library/Frameworks/Python.framework/Versions/3.6/bin:/usr/local/sbin:/usr/local/bin:/Users/sarahschneider/node_modules/.bin/:/Users/sarahschneider/.npm-global/bin:/Users/sarahschneider/.rbenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+  /Users/sarahschneider/Documents/_Sarah/projects/freecodecamp/collapse/node_modules/.bin:/Users/sarahschneider/.config/yarn/link/node_modules/.bin:/Users/sarahschneider/Documents/_Sarah/projects/freecodecamp/collapse/node_modules/.bin:/Users/sarahschneider/.config/yarn/link/node_modules/.bin:/usr/local/Cellar/node/10.0.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/Cellar/node/10.0.0/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/Cellar/node/10.0.0/bin/node_modules/npm/bin/node-gyp-bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/usr/local/sbin:/usr/local/bin:/Users/sarahschneider/node_modules/.bin/:/Users/sarahschneider/.npm-global/bin:/Users/sarahschneider/.rbenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 Yarn version: 
   1.5.1
@@ -982,9 +982,9 @@ Lockfile:
 
 Trace: 
   Error: Command failed.
-  Exit code: 1
+  Exit signal: SIGKILL
   Command: sh
-  Arguments: -c concurrently --kill-others-on-fail "yarn server" "yarn client" "yarn sass"
+  Arguments: -c LOG_LEVEL=debug supervisor server.js
   Directory: /Users/sarahschneider/Documents/_Sarah/projects/freecodecamp/collapse
   Output:
   

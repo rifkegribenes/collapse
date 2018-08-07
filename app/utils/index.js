@@ -2,13 +2,13 @@ const http = require('http');
 const https = require('https');
 
 exports.getContent = (url) => {
-  console.log(`utils/index.js > 5`);
+
   // return new pending promise
   return new Promise((resolve, reject) => {
     // select http or https module, depending on reqested url
     const lib = url.startsWith('https') ? https : http;
     const request = lib.get(url, (response) => {
-      console.log(`utils/index.js > 11`);
+
       // handle http errors
       if (response.statusCode < 200 || response.statusCode > 299) {
         console.log(`utils/index.js > 14`);
@@ -27,7 +27,6 @@ exports.getContent = (url) => {
         if (!data || data.quandl_error) {
           reject(data);
         } else {
-          console.log('utils/index.js > 28');
           resolve(data);
         }
       });

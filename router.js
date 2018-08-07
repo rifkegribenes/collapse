@@ -23,10 +23,6 @@ module.exports = function (app) {
   // Returns fail status + message -or- array of all stocks
   stockRoutes.get('/allstocks', StockController.getAllStocks);
 
-  // Get one stock by code
-  // Returns fail status + message -or- single stock object
-  stockRoutes.get('/view/:stock/', StockController.getOneStock);
-
   // Add a stack
   // Returns fail status + message -or- success status
   stockRoutes.put('/add/:stock/', StockController.addStock);
@@ -38,9 +34,5 @@ module.exports = function (app) {
 
   // Set url for API group routes
   app.use('/api', apiRoutes);
-
-  // Catch client-side routes that don't exist on the back-end.
-  // Redirects to /#/redirect={route}/{optional_id}
-  // app.get('/:client_route/:id?', StaticController.redirectHash);
 
 };
