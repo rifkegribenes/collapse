@@ -89,20 +89,23 @@ class Home extends React.Component {
         <h2 className="header">
         </h2>
         <div className="chart">
-          <HighchartsStockChart>
+          <HighchartsStockChart
+            margin={[120,60,100,60]}
+            spacing={[40,0,20,40]}
+          >
           <Chart
             zoomType="x"
-            margin={[120,60,100,60]}
-            spacing={[40,0,20,120]}
+            margin={[140,60,100,80]}
+            spacing={[40,0,20,0]}
             height={500}
           />
 
           <Title margin={60} >Collapse</Title>
-          <Subtitle>{`A front-row seat to the collapse of late capitalism.\n Featuring websockets so you can watch in real time with your friends.`}</Subtitle>
+          <Subtitle>A front-row seat to the collapse of late capitalism. Featuring websockets so you can watch in real time with your friends.</Subtitle>
           <Legend />
 
           <RangeSelector
-            buttonPosition={{ y:-120 }}
+            buttonPosition={{ y:-140 }}
             align="center"
           >
             <RangeSelector.Button count={7} type="day">7d</RangeSelector.Button>
@@ -116,11 +119,11 @@ class Home extends React.Component {
           <XAxis
             type='datetime'
         >
-            <XAxis.Title margin={20} >Time</XAxis.Title>
+            <XAxis.Title margin={10} >Time</XAxis.Title>
           </XAxis>
 
-          <YAxis margin={60}>
-            <YAxis.Title spacing={60}>Price</YAxis.Title>
+          <YAxis margin={60} labels={{x:-10}}>
+            <YAxis.Title margin={0} offset={0} x={-45}>Price</YAxis.Title>
             {this.props.stock.stocks.length ? this.getSeries(this.props.stock.stocks) : null}
           </YAxis>
 
