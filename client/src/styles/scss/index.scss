@@ -29,6 +29,7 @@
 
 .card {
 	padding: 20px;
+  border-radius: 4px;
 	border: 1px solid #ccc;
 	width: 32%;
 	margin: 20px 1%;
@@ -38,12 +39,48 @@
 .app {
 	background-color: #444444;
 	padding: 40px;
+  height: 100vh;
 }
 
 
-.highcharts-background
- {
+.highcharts-background {
 	padding: 20px;
+}
+
+.highcharts-axis-labels {
+  text-transform: uppercase;
+}
+
+.highcharts-axis-title {
+  text-transform: uppercase;
+  font-size: 1.2em;
+  padding: 10px;
+}
+
+.highcharts-title {
+  font-family: "Lato", sans-serif;
+  color: silver;
+  font-size: 24px;
+  text-transform: uppercase;
+  font-weight: 700;
+  position: relative;
+  top: 15px;
+}
+
+.highcharts-subtitle {
+  font-family: "Lato", sans-serif;
+  font-weight: 200;
+  font-size: 1.4em;
+  text-transform: none;
+}
+
+.highcharts-input-group,
+.highcharts-legend-title {
+  display: none;
+}
+
+.highcharts-range-selector-group {
+  width: 100%;
 }
 
 .stock {
@@ -88,7 +125,40 @@
 	}
 }
 
+.add {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 
+  &__input {
+    padding: 10px;
+    font-size: 1.2em;
+    border-radius: 4px;
+    border: none;
+    width: 300px;
+    margin: auto;
+  }
+
+  &__button {
+    display: block;
+    width: 300px;
+    margin: auto;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0 transparent;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: white;
+    background: darkgreen;
+    font-weight: 300;
+
+    &:hover {
+      background-color: green;
+    }
+  }
+}
 
 
 

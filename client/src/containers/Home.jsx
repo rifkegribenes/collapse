@@ -2,7 +2,7 @@ import React from "react";
 import Highcharts from 'highcharts/js/highstock';
 import {
   HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Title,
-  Subtitle, Legend, LineSeries, Navigator, RangeSelector, Tooltip
+  Subtitle, Legend, LineSeries, RangeSelector, Tooltip
 } from 'react-jsx-highstock';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -92,37 +92,35 @@ class Home extends React.Component {
           <HighchartsStockChart>
           <Chart
             zoomType="x"
-            height="400"
+            margin={[120,60,100,60]}
+            spacing={[40,0,20,120]}
+            height={500}
           />
 
-          <Title>Collapse</Title>
-          <Subtitle>A front-row seat to the collapse of late capitalism. Featuring websockets so you can watch in real time with your friends.</Subtitle>
-          <Legend>
-            <Legend.Title>Key</Legend.Title>
-          </Legend>
+          <Title margin={60} >Collapse</Title>
+          <Subtitle>{`A front-row seat to the collapse of late capitalism.\n Featuring websockets so you can watch in real time with your friends.`}</Subtitle>
+          <Legend />
 
-          <RangeSelector>
-            <RangeSelector.Button count={1} type="day">1d</RangeSelector.Button>
+          <RangeSelector
+            buttonPosition={{ y:-120 }}
+            align="center"
+          >
             <RangeSelector.Button count={7} type="day">7d</RangeSelector.Button>
             <RangeSelector.Button count={1} type="month">1m</RangeSelector.Button>
+            <RangeSelector.Button count={6} type="month">6m</RangeSelector.Button>
             <RangeSelector.Button type="all">All</RangeSelector.Button>
-            <RangeSelector.Input boxBorderColor="#7cb5ec" />
           </RangeSelector>
 
           <Tooltip shared />
 
           <XAxis
-            dateTimeLabelFormats={{
-              day: '%b %e',
-              week: '%b %e'
-            }}
             type='datetime'
         >
-            <XAxis.Title>Time</XAxis.Title>
+            <XAxis.Title margin={20} >Time</XAxis.Title>
           </XAxis>
 
-          <YAxis>
-            <YAxis.Title>Price</YAxis.Title>
+          <YAxis margin={60}>
+            <YAxis.Title spacing={60}>Price</YAxis.Title>
             {this.props.stock.stocks.length ? this.getSeries(this.props.stock.stocks) : null}
           </YAxis>
 
@@ -185,7 +183,7 @@ class Home extends React.Component {
                 })
               }}
             >
-            Add
+            Add Stock
           </button>
         </div>
       </div>
