@@ -7,7 +7,8 @@ import {
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ReduxToastr from 'react-redux-toastr';
-import toastr from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
+import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 
 // import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
@@ -36,7 +37,7 @@ class Home extends React.Component {
     this.props.api.getAllStocks()
       .then((result) => {
         console.log(this.props.stock.stocks);
-        if (result === "GET_ALL_STOCKS_FAILURE") {
+        if (result.type === "GET_ALL_STOCKS_FAILURE") {
           toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
         }
       });
@@ -47,7 +48,7 @@ class Home extends React.Component {
       this.props.api.getAllStocks()
       .then((result) => {
         console.log(this.props.stock.stocks);
-        if (result === "GET_ALL_STOCKS_FAILURE") {
+        if (result.type === "GET_ALL_STOCKS_FAILURE") {
           toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
         }
         this.props.actions.toggleRefresh();
@@ -96,7 +97,7 @@ class Home extends React.Component {
     return (
       <div className="home">
         <Spinner cssClass={this.props.stock.spinnerClass} />
-        <ReduxToastr closeOnToastrClick />
+        <ReduxToastr position='bottom-center' transitionIn='bounceIn' transitionOut='fadeOut'/>
         <h2 className="header"> </h2>
         <div className="chart">
           <HighchartsStockChart
@@ -155,13 +156,16 @@ class Home extends React.Component {
                 onClick={() => {
                   this.props.api.addStock(this.state.input)
                     .then((result) => {
-                      this.clearInput();
-                      if (result === "ADD_STOCK_FAILURE") {
-                        toastr.error('Failed to add stock', this.props.stock.errorMsg);
+                      console.log(result);
+                      if (result.type === "ADD_STOCK_FAILURE") {
+                        console.log(this.props.stock.errorMsg);
+                        toastr.error(`Failed to add ${this.state.input.toUpperCase()}, code not found.`);
+                        this.clearInput();
                         } else {
+                        this.clearInput();
                         this.props.api.getAllStocks()
                         .then((result) => {
-                          if (result === "GET_ALL_STOCKS_FAILURE") {
+                          if (result.type === "GET_ALL_STOCKS_FAILURE") {
                             toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
                           }
                           console.log(this.props.stock.stocks);
@@ -186,12 +190,12 @@ class Home extends React.Component {
                         () => this.props.api.removeStock(stock._id)
                           .then((result) => {
                             this.clearInput();
-                            if (result === "REMOVE_STOCK_FAILURE") {
-                                toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
+                            if (result.type === "REMOVE_STOCK_FAILURE") {
+                                toastr.error(`Failed to remove stock`, this.props.stock.errorMsg);
                               } else {
                                 this.props.api.getAllStocks()
                                 .then((result) => {
-                                  if (result === "GET_ALL_STOCKS_FAILURE") {
+                                  if (result.type === "GET_ALL_STOCKS_FAILURE") {
                                     toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
                                   }
                                   console.log(this.props.stock.stocks);
