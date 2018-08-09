@@ -10,6 +10,7 @@ import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import Spinner from "./Spinner";
 import AddStock from "./AddStock";
 import StockChart from "./StockChart";
+import StockCard from "./StockCard";
 import * as Actions from "../store/actions";
 import * as apiActions from "../store/actions/apiActions";
 
@@ -24,6 +25,7 @@ class Home extends React.Component {
     }
     this.handleInput = this.handleInput.bind(this);
     this.addStock = this.addStock.bind(this);
+    this.removeStock = this.removeStock.bind(this);
     this.getSeries = this.getSeries.bind(this);
   }
 
@@ -134,15 +136,10 @@ class Home extends React.Component {
             this.props.stock.stocks.map((stock, i) => {
               if (stock) {
                 return (
-                  <div key={i} className="card">
-                    <div className="stock stock__code">{stock.code}</div>
-                    <div className="stock stock__name">{stock.name}</div>
-                    <button
-                      className="stock__button"
-                      aria-label="remove stock"
-                      onClick={ () => this.removeStock(stock._id) }
-                    >&times;</button>
-                  </div>
+                  <StockCard
+                    removeStock={this.removeStock}
+                    stock={stock}
+                  />
                   )
               } else {
                 return null;
