@@ -43,6 +43,18 @@
   min-height: 100vh;
 }
 
+.empty {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  font-family: "Lato", sans-serif;
+  color: silver;
+  text-align: center;
+  width: 100%;
+  padding: 40px;
+  line-height: 1.5em;
+}
+
 
 .highcharts-background {
 	padding: 20px;
@@ -136,13 +148,13 @@
     font-size: 1.2em;
     border-radius: 4px;
     border: none;
-    width: 300px;
+    width: 100%;
     margin: auto;
   }
 
   &__button {
     display: block;
-    width: 300px;
+    width: 100%;
     margin: auto;
     appearance: none;
     -webkit-appearance: none;

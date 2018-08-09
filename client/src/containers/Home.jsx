@@ -130,9 +130,38 @@ class Home extends React.Component {
         </HighchartsStockChart>
 
         </div>
-        <div className="row">
-          {this.props.stock.stocks.length ?
-            this.props.stock.stocks.map((stock) => {
+
+        {this.props.stock.stocks.length ?
+          <div className="row">
+          <div className="card">
+            <input
+              className="add__input"
+              type="text"
+              placeholder="Stock code"
+              value={this.state.input}
+              onChange={(e) => this.handleInput(e)}
+              />
+            <button
+              className="add__button"
+              type="button"
+              onClick={() => {
+                console.log('add');
+                this.props.api.addStock(this.state.input)
+                  .then((result) => {
+                    console.log(result);
+                    this.props.api.getAllStocks()
+                    .then((result) => {
+                      console.log('added');
+                      console.log(this.props.stock.stocks);
+                      this.clearInput();
+                    })
+                  })
+                }}
+              >
+              Add Stock
+            </button>
+        </div>
+            {this.props.stock.stocks.map((stock) => {
               if (stock) {
                 return (
                   <div key={stock._id} className="card">
@@ -158,37 +187,11 @@ class Home extends React.Component {
               } else {
                 return null;
               }
-            }) : "no stocks"
-          }
-        </div>
-        <div className="add">
-          <input
-            className="add__input"
-            type="text"
-            placeholder="Stock code"
-            value={this.state.input}
-            onChange={(e) => this.handleInput(e)}
-            />
-          <button
-            className="add__button"
-            type="button"
-            onClick={() => {
-              console.log('add');
-              this.props.api.addStock(this.state.input)
-                .then((result) => {
-                  console.log(result);
-                  this.props.api.getAllStocks()
-                  .then((result) => {
-                    console.log('added');
-                    console.log(this.props.stock.stocks);
-                    this.clearInput();
-                  })
-                })
-              }}
-            >
-            Add Stock
-          </button>
-        </div>
+            })}
+          </div> :
+          <div className="empty">No stocks! <br /> Enter a code and click "Add Stock" to get started.</div>
+        }
+
       </div>
     );
   }
