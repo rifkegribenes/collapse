@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
-import appState from "../reducers/appState";
 import stock from "../reducers/stock";
+import {reducer as toastrReducer} from 'react-redux-toastr';
 
 const rootReducer = combineReducers({
-  appState,
-  stock
+  stock,
+  toastr: toastrReducer
 });
 
 export default rootReducer;

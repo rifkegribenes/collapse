@@ -6,6 +6,10 @@ import {
 } from 'react-jsx-highstock';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import ReduxToastr from 'react-redux-toastr';
+import toastr from 'react-redux-toastr';
+
+// import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
 import Spinner from "./Spinner";
 import * as Actions from "../store/actions";
@@ -30,16 +34,22 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.props.api.getAllStocks()
-      .then(() => {
+      .then((result) => {
         console.log(this.props.stock.stocks);
+        if (result === "GET_ALL_STOCKS_FAILURE") {
+          toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
+        }
       });
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.stock.refresh && !this.props.stock.refresh) {
       this.props.api.getAllStocks()
-      .then(() => {
+      .then((result) => {
         console.log(this.props.stock.stocks);
+        if (result === "GET_ALL_STOCKS_FAILURE") {
+          toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
+        }
         this.props.actions.toggleRefresh();
       });
     }
@@ -86,81 +96,83 @@ class Home extends React.Component {
     return (
       <div className="home">
         <Spinner cssClass={this.props.stock.spinnerClass} />
-        <h2 className="header">
-        </h2>
+        <ReduxToastr closeOnToastrClick />
+        <h2 className="header"> </h2>
         <div className="chart">
           <HighchartsStockChart
             margin={[120,60,100,60]}
             spacing={[40,0,20,40]}
           >
-          <Chart
-            zoomType="x"
-            margin={[140,60,100,80]}
-            spacing={[40,0,20,0]}
-            height={500}
-          />
+            <Chart
+              zoomType="x"
+              margin={[140,60,100,80]}
+              spacing={[40,0,20,0]}
+              height={500}
+            />
 
-          <Title margin={60} >Collapse</Title>
-          <Subtitle>A front-row seat to the collapse of late capitalism. Featuring websockets so you can watch in real time with your friends.</Subtitle>
-          <Legend />
+            <Title margin={60} >Collapse</Title>
+            <Subtitle>A front-row seat to the collapse of late capitalism. Featuring websockets so you can watch in real time with your friends.</Subtitle>
+            <Legend />
 
-          <RangeSelector
-            buttonPosition={{ y:-140 }}
-            align="center"
-          >
-            <RangeSelector.Button count={7} type="day">7d</RangeSelector.Button>
-            <RangeSelector.Button count={1} type="month">1m</RangeSelector.Button>
-            <RangeSelector.Button count={6} type="month">6m</RangeSelector.Button>
-            <RangeSelector.Button type="all">All</RangeSelector.Button>
-          </RangeSelector>
+            <RangeSelector
+              buttonPosition={{ y:-140 }}
+              align="center"
+            >
+              <RangeSelector.Button count={7} type="day">7d</RangeSelector.Button>
+              <RangeSelector.Button count={1} type="month">1m</RangeSelector.Button>
+              <RangeSelector.Button count={6} type="month">6m</RangeSelector.Button>
+              <RangeSelector.Button type="all">All</RangeSelector.Button>
+            </RangeSelector>
 
-          <Tooltip shared />
+            <Tooltip shared />
 
-          <XAxis
-            type='datetime'
-        >
-            <XAxis.Title margin={10} >Time</XAxis.Title>
-          </XAxis>
+            <XAxis type='datetime'>
+              <XAxis.Title margin={10}>Time</XAxis.Title>
+            </XAxis>
 
-          <YAxis margin={60} labels={{x:-10}}>
-            <YAxis.Title margin={0} offset={0} x={-45}>Price</YAxis.Title>
-            {this.props.stock.stocks.length ? this.getSeries(this.props.stock.stocks) : null}
-          </YAxis>
+            <YAxis margin={60} labels={{x:-10}}>
+              <YAxis.Title margin={0} offset={0} x={-45}>Price</YAxis.Title>
+              {this.props.stock.stocks.length ? this.getSeries(this.props.stock.stocks) : null}
+            </YAxis>
 
-        </HighchartsStockChart>
+          </HighchartsStockChart>
 
         </div>
 
         {this.props.stock.stocks.length ?
           <div className="row">
-          <div className="card">
-            <input
-              className="add__input"
-              type="text"
-              placeholder="Stock code"
-              value={this.state.input}
-              onChange={(e) => this.handleInput(e)}
-              />
-            <button
-              className="add__button"
-              type="button"
-              onClick={() => {
-                console.log('add');
-                this.props.api.addStock(this.state.input)
-                  .then((result) => {
-                    console.log(result);
-                    this.props.api.getAllStocks()
+            <div className="card">
+              <input
+                className="add__input"
+                type="text"
+                placeholder="Stock code"
+                value={this.state.input}
+                onChange={(e) => this.handleInput(e)}
+                />
+              <button
+                className="add__button"
+                type="button"
+                onClick={() => {
+                  this.props.api.addStock(this.state.input)
                     .then((result) => {
-                      console.log('added');
-                      console.log(this.props.stock.stocks);
                       this.clearInput();
-                    })
-                  })
-                }}
-              >
-              Add Stock
-            </button>
-        </div>
+                      if (result === "ADD_STOCK_FAILURE") {
+                        toastr.error('Failed to add stock', this.props.stock.errorMsg);
+                        } else {
+                        this.props.api.getAllStocks()
+                        .then((result) => {
+                          if (result === "GET_ALL_STOCKS_FAILURE") {
+                            toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
+                          }
+                          console.log(this.props.stock.stocks);
+                        });
+                      }
+                    });
+                  }}
+                >
+                Add Stock
+              </button>
+            </div>
             {this.props.stock.stocks.map((stock) => {
               if (stock) {
                 return (
@@ -172,13 +184,19 @@ class Home extends React.Component {
                       aria-label="remove stock"
                       onClick={
                         () => this.props.api.removeStock(stock._id)
-                          .then(() => {
-                            this.props.api.getAllStocks()
-                            .then(() => {
-                              console.log('removed');
-                              console.log(this.props.stock.stocks);
-                              this.clearInput();
-                            })
+                          .then((result) => {
+                            this.clearInput();
+                            if (result === "REMOVE_STOCK_FAILURE") {
+                                toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
+                              } else {
+                                this.props.api.getAllStocks()
+                                .then((result) => {
+                                  if (result === "GET_ALL_STOCKS_FAILURE") {
+                                    toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
+                                  }
+                                  console.log(this.props.stock.stocks);
+                                })
+                              }
                           })
                         }
                     >&times;</button>
@@ -198,7 +216,6 @@ class Home extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  appState: state.appState,
   stock: state.stock
 });
 

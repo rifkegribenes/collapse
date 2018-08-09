@@ -5,11 +5,12 @@
   "dependencies": {
     "highcharts": "^6.1.1",
     "immutability-helper": "^2.7.1",
+    "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-jsx-highstock": "^3.1.0",
     "react-redux": "^5.0.7",
-    "react-vis": "^1.10.4",
+    "react-redux-toastr": "^7.4.0",
     "redux": "^4.0.0",
     "redux-api-middleware": "^2.3.0"
   },
