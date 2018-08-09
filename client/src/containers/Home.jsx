@@ -10,19 +10,11 @@ import ReduxToastr from 'react-redux-toastr';
 import { toastr } from 'react-redux-toastr';
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 
-// import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
-
 import Spinner from "./Spinner";
 import * as Actions from "../store/actions";
 import * as apiActions from "../store/actions/apiActions";
 
-const colors = [
-  '#6740b4',
-  '#2c98f0',
-  '#f05830',
-  '#febf2e',
-  '#50ad55'
-];
+const colors = [ "#2b908f", "#90ee7e", "#f45b5b", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee", "#55BF3B", "#DF5353", "#7798BF", "#aaeeee" ];
 
 class Home extends React.Component {
 
@@ -34,25 +26,12 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.props.api.getAllStocks()
-      .then((result) => {
-        console.log(this.props.stock.stocks);
-        if (result.type === "GET_ALL_STOCKS_FAILURE") {
-          toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
-        }
-      });
+    this.getAllStocks();
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.stock.refresh && !this.props.stock.refresh) {
-      this.props.api.getAllStocks()
-      .then((result) => {
-        console.log(this.props.stock.stocks);
-        if (result.type === "GET_ALL_STOCKS_FAILURE") {
-          toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
-        }
-        this.props.actions.toggleRefresh();
-      });
+      this.getAllStocks(true);
     }
 
   }
@@ -69,8 +48,47 @@ class Home extends React.Component {
     });
   }
 
+  getAllStocks(refresh) {
+    this.props.api.getAllStocks()
+      .then((result) => {
+        console.log(this.props.stock.stocks);
+        if (result.type === "GET_ALL_STOCKS_FAILURE") {
+          toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
+        }
+        if (refresh) {
+          this.props.actions.toggleRefresh();
+        }
+      });
+  }
+
+  addStock() {
+    this.props.api.addStock(this.state.input)
+    .then((result) => {
+      console.log(result);
+      if (result.type === "ADD_STOCK_FAILURE") {
+        console.log(this.props.stock.errorMsg);
+        toastr.error(`Failed to add ${this.state.input.toUpperCase()}, code not found.`);
+        this.clearInput();
+        } else {
+        this.clearInput();
+        this.getAllStocks();
+      }
+    });
+  }
+
+  removeStock(stockId) {
+    this.props.api.removeStock(stockId)
+      .then((result) => {
+        this.clearInput();
+        if (result.type === "REMOVE_STOCK_FAILURE") {
+            toastr.error(`Failed to remove stock`, this.props.stock.errorMsg);
+          } else {
+            this.getAllStocks();
+          }
+      })
+  }
+
   getSeries(chartData) {
-    // console.log(chartData);
     return chartData.map((data, i) => {
       if (data) {
         return (
@@ -79,6 +97,7 @@ class Home extends React.Component {
             id={i}
             name={data.code}
             step
+            compare={data.value}
             color={colors[i]}
             data={data.data.reverse().map(info => {
           return [
@@ -109,6 +128,11 @@ class Home extends React.Component {
               margin={[140,60,100,80]}
               spacing={[40,0,20,0]}
               height={500}
+              plotOptions={{
+                series: {
+                  compare: 'value'
+                }
+              }}
             />
 
             <Title margin={60} >Collapse</Title>
@@ -125,13 +149,22 @@ class Home extends React.Component {
               <RangeSelector.Button type="all">All</RangeSelector.Button>
             </RangeSelector>
 
-            <Tooltip shared />
+            <Tooltip
+              shared
+            />
 
             <XAxis type='datetime'>
               <XAxis.Title margin={10}>Time</XAxis.Title>
             </XAxis>
 
-            <YAxis margin={60} labels={{x:-10}}>
+            <YAxis
+              margin={60}
+              labels={{
+                x:-10,
+                formatter: function() {
+                  return `${this.value > 0 ? ' + ' : ''}${this.value}%`
+                }
+              }}>
               <YAxis.Title margin={0} offset={0} x={-45}>Price</YAxis.Title>
               {this.props.stock.stocks.length ? this.getSeries(this.props.stock.stocks) : null}
             </YAxis>
@@ -153,56 +186,21 @@ class Home extends React.Component {
               <button
                 className="add__button"
                 type="button"
-                onClick={() => {
-                  this.props.api.addStock(this.state.input)
-                    .then((result) => {
-                      console.log(result);
-                      if (result.type === "ADD_STOCK_FAILURE") {
-                        console.log(this.props.stock.errorMsg);
-                        toastr.error(`Failed to add ${this.state.input.toUpperCase()}, code not found.`);
-                        this.clearInput();
-                        } else {
-                        this.clearInput();
-                        this.props.api.getAllStocks()
-                        .then((result) => {
-                          if (result.type === "GET_ALL_STOCKS_FAILURE") {
-                            toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
-                          }
-                          console.log(this.props.stock.stocks);
-                        });
-                      }
-                    });
-                  }}
+                onClick={() => this.addStock()}
                 >
                 Add Stock
               </button>
             </div>
-            {this.props.stock.stocks.map((stock) => {
+            {this.props.stock.stocks.map((stock, i) => {
               if (stock) {
                 return (
-                  <div key={stock._id} className="card">
+                  <div key={i} className="card">
                     <div className="stock stock__code">{stock.code}</div>
                     <div className="stock stock__name">{stock.name}</div>
                     <button
                       className="stock__button"
                       aria-label="remove stock"
-                      onClick={
-                        () => this.props.api.removeStock(stock._id)
-                          .then((result) => {
-                            this.clearInput();
-                            if (result.type === "REMOVE_STOCK_FAILURE") {
-                                toastr.error(`Failed to remove stock`, this.props.stock.errorMsg);
-                              } else {
-                                this.props.api.getAllStocks()
-                                .then((result) => {
-                                  if (result.type === "GET_ALL_STOCKS_FAILURE") {
-                                    toastr.error('Failed to fetch stocks', this.props.stock.errorMsg);
-                                  }
-                                  console.log(this.props.stock.stocks);
-                                })
-                              }
-                          })
-                        }
+                      onClick={ () => this.removeStock(stock._id) }
                     >&times;</button>
                   </div>
                   )

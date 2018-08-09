@@ -16,17 +16,24 @@
 
 .row {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   max-width: 1200px;
   margin: auto;
-  padding: 0 1%; }
+  margin-top: 10px; }
 
 .card {
   padding: 20px;
   border: 1px solid #ccc;
-  width: 32%;
-  margin: 20px 1%;
+  width: 100%;
+  margin: 1%;
   position: relative; }
+  @media (min-width: 499px) {
+    .card {
+      width: 48%; } }
+  @media (min-width: 899px) {
+    .card {
+      width: 31%; } }
 
 .app {
   background-color: #444444;
