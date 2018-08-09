@@ -1,16 +1,15 @@
 import React from "react";
-import Highcharts from 'highcharts/js/highstock';
-import {
-  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Title,
-  Subtitle, Legend, LineSeries, RangeSelector, Tooltip
-} from 'react-jsx-highstock';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ReduxToastr from 'react-redux-toastr';
 import { toastr } from 'react-redux-toastr';
+import Highcharts from 'highcharts/js/highstock';
+import { LineSeries, withHighcharts } from 'react-jsx-highstock';
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 
 import Spinner from "./Spinner";
+import AddStock from "./AddStock";
+import StockChart from "./StockChart";
 import * as Actions from "../store/actions";
 import * as apiActions from "../store/actions/apiActions";
 
@@ -23,6 +22,9 @@ class Home extends React.Component {
     this.state = {
       input: ""
     }
+    this.handleInput = this.handleInput.bind(this);
+    this.addStock = this.addStock.bind(this);
+    this.getSeries = this.getSeries.bind(this);
   }
 
   componentDidMount() {
@@ -118,80 +120,18 @@ class Home extends React.Component {
         <Spinner cssClass={this.props.stock.spinnerClass} />
         <ReduxToastr position='bottom-center' transitionIn='bounceIn' transitionOut='fadeOut'/>
         <h2 className="header"> </h2>
-        <div className="chart">
-          <HighchartsStockChart
-            margin={[120,60,100,60]}
-            spacing={[40,0,20,40]}
-          >
-            <Chart
-              zoomType="x"
-              margin={[140,60,100,80]}
-              spacing={[40,0,20,0]}
-              height={500}
-              plotOptions={{
-                series: {
-                  compare: 'value'
-                }
-              }}
-            />
-
-            <Title margin={60} >Collapse</Title>
-            <Subtitle>A front-row seat to the collapse of late capitalism. Featuring websockets so you can watch in real time with your friends.</Subtitle>
-            <Legend />
-
-            <RangeSelector
-              buttonPosition={{ y:-140 }}
-              align="center"
-            >
-              <RangeSelector.Button count={7} type="day">7d</RangeSelector.Button>
-              <RangeSelector.Button count={1} type="month">1m</RangeSelector.Button>
-              <RangeSelector.Button count={6} type="month">6m</RangeSelector.Button>
-              <RangeSelector.Button type="all">All</RangeSelector.Button>
-            </RangeSelector>
-
-            <Tooltip
-              shared
-            />
-
-            <XAxis type='datetime'>
-              <XAxis.Title margin={10}>Time</XAxis.Title>
-            </XAxis>
-
-            <YAxis
-              margin={60}
-              labels={{
-                x:-10,
-                formatter: function() {
-                  return `${this.value > 0 ? ' + ' : ''}${this.value}%`
-                }
-              }}>
-              <YAxis.Title margin={0} offset={0} x={-45}>Price</YAxis.Title>
-              {this.props.stock.stocks.length ? this.getSeries(this.props.stock.stocks) : null}
-            </YAxis>
-
-          </HighchartsStockChart>
-
-        </div>
-
-        {this.props.stock.stocks.length ?
-          <div className="row">
-            <div className="card">
-              <input
-                className="add__input"
-                type="text"
-                placeholder="Stock code"
-                value={this.state.input}
-                onChange={(e) => this.handleInput(e)}
-                />
-              <button
-                className="add__button"
-                type="button"
-                onClick={() => this.addStock()}
-                >
-                Add Stock
-              </button>
-            </div>
-            {this.props.stock.stocks.map((stock, i) => {
+        <StockChart
+          getSeries={this.getSeries}
+          stocks={this.props.stock.stocks}
+        />
+        <div className="row">
+          <AddStock
+            handleInput={this.handleInput}
+            addStock={this.addStock}
+            input={this.state.input}
+          />
+          {this.props.stock.stocks.length ?
+            this.props.stock.stocks.map((stock, i) => {
               if (stock) {
                 return (
                   <div key={i} className="card">
@@ -207,11 +147,10 @@ class Home extends React.Component {
               } else {
                 return null;
               }
-            })}
-          </div> :
-          <div className="empty">No stocks! <br /> Enter a code and click "Add Stock" to get started.</div>
-        }
-
+            }) :
+            <div className="empty">No stocks! <br /> Enter a code and click "Add Stock" to get started.</div>
+          }
+        </div>
       </div>
     );
   }
