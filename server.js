@@ -18,6 +18,15 @@ mongoose.Promise = global.Promise;
 const router = require('./router');
 router(app);
 
+// set static path
+app.use(express.static(path.join(__dirname, '/client/build/')));
+
+app.get('/', (req, res) => {
+  console.log('root route, serving client');
+  res.status(200)
+    .sendFile(path.join(__dirname, '../client/build/index.html'));
+});
+
 // launch server
 const http = require('http');
 const port = process.env.PORT || 3001;

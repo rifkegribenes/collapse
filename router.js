@@ -2,7 +2,6 @@ const APP_HOST = process.env.APP_HOST;
 const CLIENT_URL = process.env.NODE_ENV === 'production' ? APP_HOST : 'localhost:3000';
 
 const StockController = require('./app/controllers/stock.ctrl');
-const StaticController = require('./app/controllers/static.ctrl');
 
 const express = require('express');
 // const helpers = require('./app/utils/index');
