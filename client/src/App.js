@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 import Home from './containers/Home';
+import github from "./img/github-white.svg";
 
 import * as apiActions from "./store/actions/apiActions";
 import * as Actions from "./store/actions";
@@ -27,6 +28,18 @@ class App extends Component {
     return (
       <div className="app">
         <Home />
+        <div className="footer">
+          <div className="footer__wrap">
+            <a
+              href="https://github.com/rifkegribenes/collapse"
+              rel="noopener noreferrer"
+              target="_blank"
+              className="footer__link"
+            >
+              <img src={github} className="footer__icon" alt="github" />
+            </a>
+          </div>
+        </div>
       </div>
     );
   }
