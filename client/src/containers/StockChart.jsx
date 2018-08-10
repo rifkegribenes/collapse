@@ -1,8 +1,7 @@
 import React from "react";
-import Highcharts from 'highcharts/js/highstock';
 import {
-  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Title,
-  Subtitle, Legend, LineSeries, RangeSelector, Tooltip
+  HighchartsStockChart, Chart, XAxis, YAxis, Title,
+  Subtitle, Legend, RangeSelector, Tooltip
 } from 'react-jsx-highstock';
 
 const StockChart = (props) => (
