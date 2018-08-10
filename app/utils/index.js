@@ -32,6 +32,11 @@ exports.getContent = (url) => {
       });
     });
     // handle connection errors of the request
-    request.on('error', (err) => reject(err));
+    request.on('error', (err) => {
+      console.log('utils/index.js > 36');
+      console.log(url);
+      console.log(err);
+      reject(err));
+  }
   });
 };
