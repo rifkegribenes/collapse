@@ -74,7 +74,7 @@ exports.addStock = (req, res) => {
     return res.status(400).json({ message: 'Stock not found.' });
   }
 
-  utils.getContent(`https://www.quandl.com/api/v3/datasets/WIKI/${req.params.stock.toUpperCase()}/metadata.json`)
+  utils.getContent(`https://www.quandl.com/api/v3/datasets/WIKI/${req.params.stock.toUpperCase()}/metadata.json?api_key=${process.env.QUANDL_API_KEY}`)
     .then((data) => {
         console.log('stock.ctrl.js > 116');
         const code = data.dataset.dataset_code;
