@@ -2,7 +2,7 @@
 
 ### [collapse-of-late-capitalism.herokuapp.com](https://collapse-of-late-capitalism.herokuapp.com/)
 
-![collapse screenshot](https://raw.githubusercontent.com/rifkegribenes/collapse/master/client/public/img/Screenshot.png)
+![collapse screenshot](https://raw.githubusercontent.com/rifkegribenes/collapse/master/client/public/screenshot.jpg)
 
 A front-row seat to the collapse of late capitalism. Uses websockets so you can watch in real time with your friends.
 
