@@ -7,6 +7,7 @@ const middleware = require('./middleware');
 app.use(middleware);
 const favicon = require('serve-favicon');
 const dotenv = require('dotenv').load();
+const path = require('path');
 
 // connect to db
 const mongoose = require('mongoose');

@@ -1,4 +1,3 @@
-const path = require('path');
 const morgan = require('morgan');
 const cors = require('cors');
 const express = require('express');
@@ -8,8 +7,7 @@ const middleware = [
   morgan('tiny'),
   cors(),
   bodyParser.json(),
-  bodyParser.urlencoded({ extended: true }),
-  express.static(path.join(__dirname, '../../client/build')),
+  bodyParser.urlencoded({ extended: true })
 ]
 
 module.exports = middleware
