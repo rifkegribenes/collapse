@@ -12,7 +12,6 @@ exports.getContent = (url) => {
       // handle http errors
       if (response.statusCode < 200 || response.statusCode > 299) {
         console.log(`utils/index.js > 14`);
-        console.log(url);
          reject(new Error(`Failed to load page, status code: ${response.statusCode}`));
        }
       // temporary data holder
