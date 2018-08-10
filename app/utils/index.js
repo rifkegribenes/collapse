@@ -36,7 +36,7 @@ exports.getContent = (url) => {
       console.log('utils/index.js > 36');
       console.log(url);
       console.log(err);
-      reject(err));
+      reject(err);
   }
   });
 };
