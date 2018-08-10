@@ -106,6 +106,7 @@ exports.addStock = (req, res) => {
       })
       .catch((err) => {
         console.log('stock.ctrl.js > 133');
+        console.log(req.params.stock.toUpperCase());
         console.log(err);
         return res.status(400).json({ message: err });
       });
