@@ -8,61 +8,35 @@ const handleError = (res, statusCode) => {
   };
 }
 
-const handleResponse = (res, statusCode) => {
-  const status = statusCode || 200;
-  return (entity) => {
-    if (entity) {
-      res.status(status).json(entity);
-    }
-  };
-}
+const stockDataArrayPromise = (stocks) => {
+  return stocks.map((stock) => {
+    return getStockData(stock.code)
+      .then((stockDataRecord) => {
+        return {
+          _id: stock._id,
+          name: stock.name,
+          code: stock.code,
+          data: [ ...stockDataRecord ]
+        };
+      })
+      .catch(err => console.log(`stock.ctrl.js > 62: ${err}`));
+    });
+};
 
-const handleNotFound = (res) => {
-  return (entity) => {
-    if (!entity) {
-      return res.status(400).json({ message: 'Stock not found.' });
-    }
-    return entity;
-  };
-}
-
-const removeEntity = (res) => {
-  return (entity) => {
-    if (entity) {
-      return entity.remove()
-        .then(() => {
-          res.status(204).end();
-        });
-    }
-  };
-}
 
 // get all stocks
 exports.getAllStocks = (req, res) => {
+  let stocks;
   Stock.find()
     .then((stocks) => {
-      let stockDataArrayPromise = stocks.map((stock) => {
-        return getStockData(stock.code)
-          .then((stockDataRecord) => {
-            return {
-              _id: stock._id,
-              name: stock.name,
-              code: stock.code,
-              data: [ ...stockDataRecord ]
-            };
-          })
-          .catch(err => console.log(`stock.ctrl.js > 62: ${err}`));
-        });
-
-      Promise.all(stockDataArrayPromise)
+      Promise.all(stockDataArrayPromise(stocks)) // get their data
         .then((stockDataArray) => {
-          res.status(200).json(stockDataArray);
+          res.status(200).json(stockDataArray); // and return to client
         })
-        .catch(err => console.log(`stock.ctrl.js > 69: ${err}`));
-
+        .catch(err => console.log(`stock.ctrl.js > 80: ${err}`));
     })
     .catch((err) => {
-      console.log('stock.ctrl.js > 74');
+      console.log('stock.ctrl.js > 84');
       console.log(err);
       handleError(res)
     });
@@ -93,6 +67,7 @@ const getStockData = (stock) => {
 // add stock to mongo
 exports.addStock = (req, res) => {
   console.log(`stock.ctrl.js > 107`);
+  console.log(req.params.stock.toUpperCase());
 
   if (!req.params.stock) {
     console.log(`stock.ctrl.js > 110`);
@@ -121,7 +96,7 @@ exports.addStock = (req, res) => {
               code: data.dataset.dataset_code
             });
             console.log(`stock.ctrl.js > 135`);
-            return res.status(200).json({ message: `Added stock ${code}.` });;
+            return res.status(200).json({ message: `Added stock ${code}.` });
           })
           .catch((err) => {
             console.log('stock.ctrl.js > 139');
@@ -130,7 +105,7 @@ exports.addStock = (req, res) => {
           });
       })
       .catch((err) => {
-        console.log('stock.ctrl.js > 145');
+        console.log('stock.ctrl.js > 133');
         console.log(err);
         return res.status(400).json({ message: err });
       });
@@ -138,8 +113,19 @@ exports.addStock = (req, res) => {
 
 // delete stock
 exports.removeStock = (req, res) => {
-  Stock.findById(req.params.stock)
-    .then(handleNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
+  Stock.findOneAndDelete({ _id : req.params.stock })
+    .then((stock) => {
+      console.log('stock.ctrl.js > 163');
+      if (!stock) {
+        console.log('stock.ctrl.js > 165');
+        return res.status(400).json({ message: 'Stock not found.' });
+      } else {
+        return res.status(200).json({ message: `Deleted stock ${stock.code}.` });
+      }
+    })
+    .catch((err) => {
+      console.log('stock.ctrl.js > 161');
+      console.log(err);
+      handleError(res)
+    });
 }
