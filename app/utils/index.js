@@ -37,6 +37,6 @@ exports.getContent = (url) => {
       console.log(url);
       console.log(err);
       reject(err);
-  }
+    });
   });
 };
