@@ -15,4 +15,6 @@ const devUrl = "http://localhost:3001"; // server url for local install
 
 // export const BASE_URL = devUrl;
 // export const BASE_URL = prodUrl;
-export const BASE_URL = (process.env.ENVIRONMENT === 'PRODUCTION' ? prodUrl : devUrl);
+const BASE_URL = (process.env.ENVIRONMENT === 'PRODUCTION' ? prodUrl : devUrl);
+
+export default BASE_URL;

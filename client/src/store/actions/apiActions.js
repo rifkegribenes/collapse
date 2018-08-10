@@ -1,5 +1,5 @@
 import { RSAA } from "redux-api-middleware";
-import { BASE_URL } from "./apiConfig.js";
+import BASE_URL from "./apiConfig.js";
 
 export const GET_ALL_STOCKS_REQUEST = "GET_ALL_STOCKS_REQUEST";
 export const GET_ALL_STOCKS_SUCCESS = "GET_ALL_STOCKS_SUCCESS";

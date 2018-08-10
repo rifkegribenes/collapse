@@ -3,7 +3,9 @@ import { apiMiddleware } from "redux-api-middleware";
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 import rootReducer from "./reducers/";
-let socket = io.connect('http://localhost:3001');
+import BASE_URL from "./actions/apiConfig";
+
+let socket = io.connect(BASE_URL);
 let socketIoMiddleware = createSocketIoMiddleware(socket, "server/");
 
 
